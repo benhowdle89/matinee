@@ -29,7 +29,10 @@
       "Bash(git push *)",
       "Bash(git ls-remote *)",
       "Bash(python3 -c ' *)",
-      "Bash(gh release *)"
+      "Bash(gh release *)",
+      "Read(//Users/benhowdle/Sites/orbs/.github/workflows/**)",
+      "Bash(git add *)",
+      "Bash(git -c commit.gpgsign=false commit -q -m ' *)"
     ]
   }
 }

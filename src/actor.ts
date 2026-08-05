@@ -1,7 +1,7 @@
 /**
  * The actor: what actually performs.
  *
- * Framework-agnostic on purpose — it owns position, the action queue, and the
+ * Framework-agnostic on purpose: it owns position, the action queue, and the
  * requestAnimationFrame loop, and knows nothing about React. <Stage> attaches
  * to it; it does not attach to <Stage>.
  *
@@ -149,7 +149,7 @@ export class Actor {
 
   /**
    * Drives one animation. Under reduced motion this collapses to a single
-   * tick at t=1 — a jump cut, which is exactly what the setting asks for.
+   * tick at t=1: a jump cut, which is exactly what the setting asks for.
    */
   private animate(duration: number, onTick: (t: number) => void): Promise<void> {
     if (this.destroyed) return Promise.resolve()
@@ -253,7 +253,7 @@ export class Actor {
     })
   }
 
-  /** The shared movement primitive. Not queued — callers are already queued. */
+  /** The shared movement primitive. Not queued; callers are already queued. */
   private async travel(to: Point): Promise<void> {
     const dist = distanceBetween(this.position, to)
     if (dist < 0.5) return
@@ -389,7 +389,7 @@ export class Actor {
     let toY: number
     if (scroller === document.scrollingElement || scroller === document.documentElement) {
       fromY = window.scrollY
-      // Park the target a third of the way down — where the eye expects it,
+      // Park the target a third of the way down, where the eye expects it,
       // not jammed against the top edge.
       toY = Math.max(0, fromY + rect.top - window.innerHeight * 0.34)
     } else {
@@ -412,7 +412,7 @@ export class Actor {
       } else {
         ;(scroller as Element).scrollTop = y
       }
-      // The cursor loiters while the page moves under it — a few px of counter
+      // The cursor loiters while the page moves under it: a few px of counter
       // drift, as though resting on a trackpad mid-swipe.
       this.position = {
         x: cursorFrom.x + Math.sin(t * Math.PI) * 6,
@@ -498,7 +498,7 @@ export class Actor {
 
   /**
    * Replays a script, gaps and all. Reproducing the original rhythm matters as
-   * much as reproducing the positions — the pauses are where it reads as
+   * much as reproducing the positions; the pauses are where it reads as
    * deliberate rather than mechanical.
    */
   play(script: Script): Promise<void> {
@@ -544,7 +544,7 @@ export class Actor {
         return this.performClick(target, step.action)
       case 'type':
         if (target !== undefined && step.text !== undefined) {
-          // `type` queues, and we are already inside the queue — inline the
+          // `type` queues, and we are already inside the queue, so inline the
           // work instead of deadlocking on our own chain.
           const r = this.resolve(target)
           await this.travel(r.point)
@@ -601,7 +601,7 @@ export class Actor {
 
   /**
    * Real events, on the real target. `click` here makes a React onClick fire
-   * exactly as a hand would — which is why a matinee performance drives the
+   * exactly as a hand would, which is why a matinee performance drives the
    * host app rather than drawing over it.
    */
   private fire(el: Element | null, type: string, init: MouseEventInit & { key?: string } = {}): void {

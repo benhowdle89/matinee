@@ -19,7 +19,7 @@
     "types": ["vitest/globals", "node"],
     // The demo imports 'matinee' the way a consumer does. Without this it
     // resolves by package self-reference to ./dist, which only exists after a
-    // build — fine locally, broken in CI where typecheck runs first. Point it
+    // build: fine locally, broken in CI where typecheck runs first. Point it
     // at source so the demo typechecks against what we are about to ship.
     "paths": {
       "matinee": ["./src/index.ts"]

@@ -3,7 +3,7 @@
  *
  * This records the real tab through getDisplayMedia and MediaRecorder. That
  * means one browser permission prompt, and it means the visitor picks what
- * gets shared. There is no way around the prompt — a page cannot capture
+ * gets shared. There is no way around the prompt: a page cannot capture
  * itself unasked, and it should not be able to.
  *
  * The alternative (walking the DOM onto a canvas) is a rabbit hole that

@@ -58,7 +58,7 @@ export function buildTimeline(script: Script, traits: Traits, fps = DEFAULT_FPS)
     for (let t = from; t < from + ms; t += step) emit(t, pos)
   }
 
-  /** Drift in place — what `pause` and `say` look like. */
+  /** Drift in place: what `pause` and `say` look like. */
   const wander = (from: number, ms: number): void => {
     if (ms <= 0) return
     const anchor = { ...pos }
@@ -71,7 +71,7 @@ export function buildTimeline(script: Script, traits: Traits, fps = DEFAULT_FPS)
   }
 
   /**
-   * Travel, then stand still for whatever is left of the step's budget — the
+   * Travel, then stand still for whatever is left of the step's budget: the
    * hesitation, the click, the typing all happen without the cursor moving.
    */
   const travel = (from: number, to: Point, budget: number): number => {
@@ -133,7 +133,7 @@ export function buildTimeline(script: Script, traits: Traits, fps = DEFAULT_FPS)
         break
       }
       case 'scroll': {
-        // The page moves, not the cursor — but it bobs, the way a hand resting
+        // The page moves, not the cursor, but it bobs, the way a hand resting
         // on a trackpad mid-swipe does.
         const anchor = { ...pos }
         for (let t = time; t < time + s.duration; t += step) {

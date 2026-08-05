@@ -1,5 +1,5 @@
 /**
- * matinee — the overlay.
+ * matinee: the overlay.
  *
  * Everything is scoped under .matinee-overlay and driven by two custom
  * properties (--matinee-color, --matinee-scale) set inline by <Stage>. No

@@ -12,7 +12,7 @@ jobs:
     permissions:
       # write, not read: the final step cuts the GitHub release.
       contents: write
-      # Required for npm provenance — this is what earns the "Provenance"
+      # Required for npm provenance. This is what earns the "Provenance"
       # badge on npmjs.com and cryptographically ties the tarball to this repo.
       id-token: write
 

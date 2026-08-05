@@ -1,6 +1,6 @@
 # Cloudflare Pages config for the demo site.
 #
-# Not deployed by CI — Ben wires the domain and connects the repo in the
+# Not deployed by CI; Ben wires the domain and connects the repo in the
 # Cloudflare dashboard. Once connected, these are the settings it needs:
 #
 #   Build command:        npm run demo:build

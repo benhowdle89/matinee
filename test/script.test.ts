@@ -7,7 +7,7 @@ function makeActor(overrides: Partial<ConstructorParameters<typeof Actor>[0]> = 
   return new Actor({ traits: PERSONALITIES.caffeinated, seed: 42, ...overrides })
 }
 
-/** Real elements, with real boxes — happy-dom returns zeros otherwise. */
+/** Real elements, with real boxes; happy-dom returns zeros otherwise. */
 function stageButton(id: string, box = { x: 300, y: 200, w: 120, h: 40 }): HTMLButtonElement {
   const el = document.createElement('button')
   el.id = id

@@ -2,7 +2,7 @@
  * A Script is the performance as plain data.
  *
  * It is recorded as the actor performs, never derived afterwards, and it is
- * JSON all the way down — no functions, no element references — so it can be
+ * JSON all the way down (no functions, no element references), so it can be
  * stored, posted, diffed, or handed to `play()` in a different session.
  */
 
@@ -32,7 +32,7 @@ export type Step = {
    * Where the cursor actually ended up. Redundant with `target` for point
    * targets, but for selector targets it is the difference between an export
    * that reproduces the performance and one that re-queries a page which has
-   * since changed — and it lets exports run with no DOM at all.
+   * since changed, and it lets exports run with no DOM at all.
    */
   point?: Point
   text?: string

@@ -1,5 +1,5 @@
 /**
- * Generates assets/hero.svg — matinee, made with matinee.
+ * Generates assets/hero.svg: matinee, made with matinee.
  *
  * This runs in plain Node with no browser and no headless anything, because
  * scriptToSvg() is a pure function of a Script: buildTimeline replays the
@@ -58,7 +58,7 @@ const pct = (ms) => ((ms / TOTAL) * 100).toFixed(3)
 /* Text starts at x=219 and the caret parks at x=367, so it walks 148px. */
 const CARET_TRAVEL = 148
 
-/* The stage set: a wireframe browser card. Deliberately flat and unbranded —
+/* The stage set: a wireframe browser card. Deliberately flat and unbranded:
    it is scenery, and the cursor is the only thing with colour. */
 const backdrop = `
 <style>

@@ -13,7 +13,7 @@
 
 Every AI product demo shows a cursor using software. Almost all of them are faked by hand in After Effects, and they have to be redone every time the UI changes.
 
-matinee is a ghost cursor you can programme. You write a script; an actor performs it against your real app — moving, clicking, typing, scrolling — with motion that reads as a hand rather than a tween. Then it exports itself as an animated SVG you can drop straight into a README.
+matinee is a ghost cursor you can programme. You write a script; an actor performs it against your real app (moving, clicking, typing, scrolling) with motion that reads as a hand rather than a tween. Then it exports itself as an animated SVG you can drop straight into a README.
 
 ```sh
 npm install matinee
@@ -55,7 +55,7 @@ function Demo() {
 }
 ```
 
-Every method returns a promise that resolves when the motion finishes, and queues if you call it while something else is running — so `await` is optional and the order is always the order you wrote.
+Every method returns a promise that resolves when the motion finishes, and queues if you call it while something else is running, so `await` is optional and the order is always the order you wrote.
 
 ## Why the motion looks right
 
@@ -86,7 +86,7 @@ const cursor = useCursor()
 | `getScript()` / `play(script)` | The performance as data, and back again |
 | `toSvg()` / `toPathPng()` | Exports |
 
-A **target** is a CSS selector, an `Element`, a ref, or `{ x, y }`. Selectors resolve at execution time, not call time — by the time a queued click runs, the page has usually moved on.
+A **target** is a CSS selector, an `Element`, a ref, or `{ x, y }`. Selectors resolve at execution time, not call time. By the time a queued click runs, the page has usually moved on.
 
 Clicks dispatch real events on the real element, so your app responds exactly as it would to a hand. Typing goes through the prototype value setter, which is what makes React-controlled inputs actually update instead of silently ignoring it.
 
@@ -102,7 +102,7 @@ Clicks dispatch real events on the real element, so your app responds exactly as
 | `scale` | `number` | `1` | |
 | `zIndex` | `number` | `9999` | |
 | `respectReducedMotion` | `boolean` | `true` | Jump-cuts instead of animating under `prefers-reduced-motion` |
-| `onScriptChange` | `(script: Script) => void` | — | Fires as the performance is recorded |
+| `onScriptChange` | `(script: Script) => void` |  | Fires as the performance is recorded |
 
 `<Stage>` renders its children untouched and mounts one fixed, `pointer-events: none`, `aria-hidden` overlay beside them. It never affects layout, never intercepts a click, and renders nothing cursor-related on the server.
 
@@ -117,13 +117,13 @@ Clicks dispatch real events on the real element, so your app responds exactly as
 
 ## Exports
 
-### Animated SVG — the one that matters
+### Animated SVG: the one that matters
 
 ```ts
 const svg = cursor.toSvg({ background: 'transparent', width: 720 })
 ```
 
-**This animates inside a GitHub README.** That is the whole trick, and it is why the hero at the top of this page moves. The file is entirely self-contained — the keyframes, the glyph, the nameplate and the colour are all inline, there is no `<script>` tag and no external reference of any kind, because that is precisely the shape GitHub's image sandbox will render.
+**This animates inside a GitHub README.** That is the whole trick, and it is why the hero at the top of this page moves. The file is entirely self-contained. The keyframes, the glyph, the nameplate and the colour are all inline, there is no `<script>` tag and no external reference of any kind, because that is precisely the shape GitHub's image sandbox will render.
 
 Drop it in with plain markdown:
 
@@ -143,7 +143,7 @@ const recorder = useRecorder()
 <button onClick={() => recorder.download('demo.webm')}>Download</button>
 ```
 
-Honestly: this wraps `getDisplayMedia` and `MediaRecorder`, so it records the real tab and it costs one browser permission prompt. There is no way around the prompt, and there shouldn't be — a page should not be able to capture itself unasked. matinee does not attempt to render the DOM to a canvas; that road produces something subtly wrong for every non-trivial page.
+Honestly: this wraps `getDisplayMedia` and `MediaRecorder`, so it records the real tab and it costs one browser permission prompt. There is no way around the prompt, and there shouldn't be: a page should not be able to capture itself unasked. matinee does not attempt to render the DOM to a canvas; that road produces something subtly wrong for every non-trivial page.
 
 ### Path PNG
 
@@ -164,17 +164,17 @@ const script = cursor.getScript()
 await cursor.play(script)
 ```
 
-It is JSON all the way down — no functions, no element references — so you can store it, post it, diff it in review, or replay it in a different session. Selector targets are stored as selectors so they survive rerenders; point targets are rescaled if the script is replayed on a different viewport.
+It is JSON all the way down (no functions, no element references), so you can store it, post it, diff it in review, or replay it in a different session. Selector targets are stored as selectors so they survive rerenders; point targets are rescaled if the script is replayed on a different viewport.
 
 ## Accessibility
 
-The overlay is `aria-hidden` and `pointer-events: none`, always. `respectReducedMotion` is honoured everywhere, including inside the exported SVG. Multiple `<Stage>`s on one page do not fight — each owns its own actor and its own overlay, and nothing is leaked to a global.
+The overlay is `aria-hidden` and `pointer-events: none`, always. `respectReducedMotion` is honoured everywhere, including inside the exported SVG. Multiple `<Stage>`s on one page do not fight: each owns its own actor and its own overlay, and nothing is leaked to a global.
 
 ## Not to be confused with
 
-- **[ghost-cursor](https://github.com/Xetera/ghost-cursor)** — human-like mouse movement for Puppeteer, built for bot evasion. matinee stages performances; it isn't a disguise.
-- **[Screen Studio](https://screen.studio)** — records your real screen beautifully. matinee performs your app instead of filming it, which means it re-renders when the UI changes.
-- **[rrweb](https://github.com/rrweb-io/rrweb)** — records and replays real user sessions. matinee's scripts are written, not captured.
+- **[ghost-cursor](https://github.com/Xetera/ghost-cursor)**: human-like mouse movement for Puppeteer, built for bot evasion. matinee stages performances; it isn't a disguise.
+- **[Screen Studio](https://screen.studio)**: records your real screen beautifully. matinee performs your app instead of filming it, which means it re-renders when the UI changes.
+- **[rrweb](https://github.com/rrweb-io/rrweb)**: records and replays real user sessions. matinee's scripts are written, not captured.
 
 ## Requirements
 

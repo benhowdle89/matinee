@@ -1,5 +1,5 @@
 /**
- * The animated SVG export — the flagship.
+ * The animated SVG export: the flagship.
  *
  * Produces one self-contained file with no <script>, no external references,
  * and no fetches, because that is the exact shape GitHub's sandbox will render
@@ -9,7 +9,7 @@
  * Motion is expressed as `transform: translate()` keyframes sampled from the
  * real motion function rather than as an `offset-path` sweep. Two reasons:
  * plain transform keyframes are supported by every renderer that will ever see
- * this, and — more importantly — they reproduce the overshoot and the tremor
+ * this, and, more importantly, they reproduce the overshoot and the tremor
  * exactly, because they *are* the sampled positions. An offset-path with an
  * easing function can only approximate the curve the audience actually
  * watched.

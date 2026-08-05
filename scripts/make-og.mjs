@@ -1,5 +1,5 @@
 /**
- * Generates assets/og.svg — the 1200x630 social card.
+ * Generates assets/og.svg: the 1200x630 social card.
  *
  * Writes SVG; rasterising to og.png is a separate step (see HANDOFF.md),
  * deliberately kept out of the package so matinee gains no dependency, dev or
@@ -24,7 +24,7 @@ const MUTED = '#6b6862'
 const ACCENT = '#2f6bff'
 
 /* The cursor's journey across the card, as one cubic bezier. Bowed the way
-   the motion engine bows a real one — this is a poster of a movement. */
+   the motion engine bows a real one. This is a poster of a movement. */
 const P0 = { x: 150, y: 545 }
 const C1 = { x: 380, y: 590 }
 const C2 = { x: 700, y: 300 }

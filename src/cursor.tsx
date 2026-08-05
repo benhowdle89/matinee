@@ -2,7 +2,7 @@
  * What the audience actually sees.
  *
  * Position is written straight to the DOM node from the actor's frame
- * callback — never through React state. Sixty setState calls a second would
+ * callback, never through React state. Sixty setState calls a second would
  * make the motion the one thing in the library that stutters.
  *
  * The low-frequency things (pressed, typing, caption) do go through state,

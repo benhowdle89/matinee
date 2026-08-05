@@ -110,7 +110,7 @@ describe('buildPath', () => {
 
   it('caps the bow so long journeys stay on screen', () => {
     // Perpendicular deviation from the straight line, which is what the cap
-    // governs — displacement *along* the chord is just progress.
+    // governs; displacement *along* the chord is just progress.
     const perpendicularOffset = (from: Point, to: Point, at: Point): number => {
       const dx = to.x - from.x
       const dy = to.y - from.y

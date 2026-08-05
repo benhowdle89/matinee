@@ -1,5 +1,5 @@
 /**
- * <Stage> — the two lines of integration.
+ * <Stage>: the two lines of integration.
  *
  * It renders its children completely untouched and mounts one fixed,
  * pointer-events:none, aria-hidden overlay beside them. It must never affect

@@ -91,7 +91,7 @@ export function traitsFor(p: PersonalityName | Traits | undefined): Traits {
 /* -------------------------------------------------------------------------- */
 
 /**
- * mulberry32. Seeded so a Script replays the same way twice — which is what
+ * mulberry32. Seeded so a Script replays the same way twice, which is what
  * lets the SVG export match the performance the viewer actually watched.
  */
 export function createRng(seed: number): () => number {
@@ -118,7 +118,7 @@ export function between(rng: () => number, min: number, max: number): number {
  * Minimum-jerk trajectory: 10t³ - 15t⁴ + 6t⁵.
  *
  * This is not an ease picked by eye. It is the standard model from motor
- * control research for how a human arm moves between two points — smooth
+ * control research for how a human arm moves between two points: smooth
  * start, fast middle, smooth arrival, zero velocity and acceleration at both
  * ends. It is the single highest-leverage line in this file.
  */
@@ -152,7 +152,7 @@ const OVERSHOOT_RAMP_START = 0.55
 
 /**
  * How far past the target the cursor is, as a fraction of the full overshoot.
- * Zero at both ends, exactly 1.0 at the handoff — which lets callers express
+ * Zero at both ends, exactly 1.0 at the handoff, which lets callers express
  * overshoot in honest pixels rather than in tuning-constant soup, and
  * guarantees the cursor lands precisely on target at t=1.
  */
@@ -187,7 +187,7 @@ export function distanceBetween(a: Point, b: Point): number {
  * Build a cubic bezier from `from` to `to` whose control points are pushed
  * perpendicular to the straight line between them. The bow direction and
  * magnitude are randomised within the personality's bounds, so no two journeys
- * between the same two points are identical — which is the tell that separates
+ * between the same two points are identical, which is the tell that separates
  * this from a tween.
  */
 export function buildPath(from: Point, to: Point, traits: Traits, rng: () => number): Path {
@@ -226,7 +226,7 @@ export function buildPath(from: Point, to: Point, traits: Traits, rng: () => num
   const c1 = { x: from.x + dx * t1 + nx * b1, y: from.y + dy * t1 + ny * b1 }
   const c2 = { x: from.x + dx * t2 + nx * b2, y: from.y + dy * t2 + ny * b2 }
 
-  // Approach direction is the tangent at the end of the curve — the overshoot
+  // Approach direction is the tangent at the end of the curve; the overshoot
   // carries on the way the cursor was already going, not along the chord.
   const ax = to.x - c2.x
   const ay = to.y - c2.y
@@ -255,7 +255,7 @@ export function bezierAt(path: Path, t: number): Point {
 }
 
 /**
- * Travel time as a function of distance — Fitts-ish, in that it grows
+ * Travel time as a function of distance: Fitts-ish, in that it grows
  * sub-linearly, so a flick across the screen is not ten times the duration of
  * a nudge. Clamped hard at both ends: below the floor it reads as a jump cut,
  * above the ceiling the viewer gets bored.
@@ -266,7 +266,7 @@ export function travelDuration(distance: number, traits: Traits): number {
 
 /**
  * Deterministic sub-pixel tremor. Two incommensurable sine frequencies per
- * axis, so it never visibly repeats, and it is a pure function of time — which
+ * axis, so it never visibly repeats, and it is a pure function of time, which
  * means the SVG export reproduces it exactly rather than approximating it.
  */
 export function tremorAt(t: number, amplitude: number, phase: number): Point {
@@ -286,7 +286,7 @@ export function tremorAt(t: number, amplitude: number, phase: number): Point {
  * The travel ease completes early (see SETTLE_FRACTION) and the overshoot
  * envelope carries the rest. Because that envelope is zero at t=1 and the
  * tremor fades out over the final stretch, sampling at t=1 always returns the
- * exact target — no drift, no accumulated error over a long performance.
+ * exact target: no drift, no accumulated error over a long performance.
  */
 export function sampleMotion(path: Path, t: number, traits: Traits, phase: number): Point {
   const c = clamp01(t)
@@ -307,7 +307,7 @@ export function sampleMotion(path: Path, t: number, traits: Traits, phase: numbe
 }
 
 /**
- * Idle wander for `pause()`. Lissajous-ish drift around the resting point —
+ * Idle wander for `pause()`. Lissajous-ish drift around the resting point,
  * enough to look alive, never enough to look like it is going somewhere.
  */
 export function driftAt(elapsed: number, traits: Traits, phase: number): Point {

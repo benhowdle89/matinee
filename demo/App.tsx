@@ -1,7 +1,7 @@
 /**
  * The demo page performs itself.
  *
- * Everything the cursor touches here is a real control — the copy button
+ * Everything the cursor touches here is a real control: the copy button
  * really copies, the personality switcher really switches, the input really
  * receives the typing. Nothing is mimed. That is the argument.
  */
@@ -90,7 +90,7 @@ function Page({
     setPerforming(false)
   }, [cursor])
 
-  // On load, after a beat — but never against someone who asked for less
+  // On load, after a beat, but never against someone who asked for less
   // motion, and never twice.
   useEffect(() => {
     if (hasPerformed.current) return
@@ -124,7 +124,7 @@ function Page({
         <p className="watching">
           {performing ? (
             <span className="live">
-              <span className="dot" /> performing now — nothing here is mimed
+              <span className="dot" /> performing now, nothing here is mimed
             </span>
           ) : (
             <span className="idle">that was matinee, performing this page</span>
