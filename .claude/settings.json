@@ -34,7 +34,8 @@
       "Bash(git add *)",
       "Bash(git -c commit.gpgsign=false commit -q -m ' *)",
       "Bash(npx wrangler *)",
-      "Bash(git rm *)"
+      "Bash(git rm *)",
+      "Bash(xargs -I{} gh run watch {} --repo benhowdle89/matinee --exit-status)"
     ]
   }
 }

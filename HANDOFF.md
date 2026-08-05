@@ -246,10 +246,10 @@ look at them on a real demo before you're happy.
 
 - [x] **npm trusted publisher configured**: `benhowdle89/matinee`,
       `release.yml`
-- [x] **0.1.0 published**: https://www.npmjs.com/package/matinee, with a
-      provenance attestation, zero runtime dependencies
-- [x] **GitHub release cut**:
-      https://github.com/benhowdle89/matinee/releases/tag/v0.1.0
+- [x] **Published**: https://www.npmjs.com/package/matinee, currently 0.1.1,
+      with a provenance attestation and zero runtime dependencies
+- [x] **GitHub releases cut**:
+      https://github.com/benhowdle89/matinee/releases
 - [x] **Repo public**: https://github.com/benhowdle89/matinee
 - [x] **Hero SVG embedded and animating on github.com**: verified against the
       bytes GitHub actually serves, not assumed
@@ -259,8 +259,8 @@ look at them on a real demo before you're happy.
 - [x] **Demo site live** at https://matinee.pages.dev, deployed to Cloudflare
       Pages with `wrangler`. Verified in a real browser: no console errors, no
       4xx, and the performance runs end to end.
-- [x] **`homepage` in `package.json`** points at the demo. It reaches npm on the
-      next publish, not retroactively.
+- [x] **`homepage` in `package.json`** points at the demo, and is live on npm
+      as of 0.1.1.
 - [x] **Automatic demo deploys.** The Pages project is connected to the repo in
       the Cloudflare dashboard, so every push to `main` rebuilds and ships. No
       API token is stored in GitHub. To ship by hand anyway:
