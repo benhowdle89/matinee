@@ -103,6 +103,44 @@ npm install matinee
 
 React 18 or newer. Zero runtime dependencies.
 
+### Or have your agent wire it up
+
+Paste this into Claude Code, Cursor, or whatever you use. It points the agent at the machine-readable docs first, tells it to read your actual components rather than guess selectors, and includes the constraints that are easy to get wrong.
+
+```
+Add matinee to this React project so we have a product demo that never goes stale.
+
+matinee is a programmable ghost cursor: you script it, it drives the real running app with real DOM events, and it exports the performance as a self-contained animated SVG that animates inside a GitHub README.
+
+Before writing any code, read https://matinee.pages.dev/llms-full.txt in full. It is the complete API and it lists what matinee deliberately does not do. Do not invent methods that are not in it.
+
+Then do this:
+
+1. Install it: npm install matinee
+
+2. Wrap the app root in <Stage> and import 'matinee/styles.css' exactly once.
+
+3. Find the single most important flow in THIS app by reading the actual components. Do not guess selectors. Where the elements you need have no stable id, add one, and tell me which files you touched.
+
+4. Write the performance as a component inside the <Stage>. Aim for eight to twelve seconds: moveTo, click, type, hover, pause, and a say() at the end. Keep it to one clear story rather than a tour of everything.
+
+5. Make it deliberate rather than automatic: trigger it from a ?demo=1 query param or an explicit button, so it never runs for a real user mid-task. Guard it with prefers-reduced-motion.
+
+6. Add an npm script that exports the take with cursor.toSvg(), writes it to assets/demo.svg, and embed that in our README with <img src="assets/demo.svg" width="720">.
+
+Constraints that matter, all of which are explained in llms-full.txt:
+
+- Do not use scrollTo in a take you intend to export. The SVG has no concept of scroll offset, so the exported path will not line up.
+- toSvg() exports the cursor, never the page. For a standalone clip, pass a background and a backdrop of your own raw SVG markup. With no options you get the cursor on transparency, which is for laying over a screenshot.
+- Targets resolve when the step runs, not when it is written, so every selector must exist at that moment in the flow.
+- useCursor() must be called inside a <Stage>, and it returns a stable object, so it is safe in a dependency array.
+
+Show me the plan and the list of selectors you intend to use before you start editing.
+```
+
+It is also served as plain text at [matinee.pages.dev/agent-prompt.txt](https://matinee.pages.dev/agent-prompt.txt).
+
+
 # 2. Use it
 
 Wrap your app. This is the entire integration:

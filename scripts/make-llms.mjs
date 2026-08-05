@@ -28,6 +28,22 @@ const types = readFileSync(resolve(root, 'dist/index.d.ts'), 'utf8')
 const SITE = 'https://matinee.pages.dev'
 const REPO = 'https://github.com/benhowdle89/matinee'
 
+/**
+ * The agent prompt lives in demo/agent-prompt.ts so the demo site can import
+ * it directly. Pull the template literal out of there rather than keeping a
+ * second copy, and refuse to build if it looks wrong.
+ */
+function readAgentPrompt() {
+  const src = readFileSync(resolve(root, 'demo/agent-prompt.ts'), 'utf8')
+  const match = /export const AGENT_PROMPT = `([\s\S]*?)`\s*$/m.exec(src)
+  if (!match || !match[1] || match[1].length < 500) {
+    throw new Error('could not extract AGENT_PROMPT from demo/agent-prompt.ts')
+  }
+  return match[1].replace(/\\`/g, '`').replace(/\\\$/g, '$')
+}
+
+const agentPrompt = readAgentPrompt()
+
 /* -------------------------------------------------------------------------- */
 /* llms.txt: the index                                                         */
 /* -------------------------------------------------------------------------- */
@@ -261,6 +277,15 @@ ghost-cursor is human-like mouse movement for Puppeteer built for bot evasion;
 Screen Studio records a real screen; rrweb records and replays real user
 sessions.
 
+## Adding matinee to a project
+
+If you are an agent being asked to add matinee to a codebase, this is the brief
+the maintainers would give you:
+
+\`\`\`
+${agentPrompt}
+\`\`\`
+
 ## Complete API
 
 The following is the shipped TypeScript declaration file, verbatim.
@@ -275,6 +300,7 @@ ${types.trim()}
 const outputs = [
   [resolve(root, 'demo/public/llms.txt'), index],
   [resolve(root, 'demo/public/llms-full.txt'), full],
+  [resolve(root, 'demo/public/agent-prompt.txt'), `${agentPrompt}\n`],
   [resolve(root, 'llms.txt'), index],
 ]
 
@@ -291,4 +317,15 @@ if (!full.includes('declare const PERSONALITIES') && !full.includes('PERSONALITI
 }
 if (full.length < 6000) {
   throw new Error(`llms-full.txt looks truncated (${full.length} bytes)`)
+}
+
+// Three copies of the agent prompt exist: the source of truth, the generated
+// text files, and the README. The first two cannot diverge because one is
+// derived from the other. The README is hand-written, so check it.
+const readme = readFileSync(resolve(root, 'README.md'), 'utf8')
+if (!readme.includes(agentPrompt.trim())) {
+  throw new Error(
+    'README.md does not contain the current agent prompt.\n' +
+      'Copy it from demo/agent-prompt.ts into the "Ask your agent to wire it up" fence.',
+  )
 }

@@ -21,6 +21,7 @@ import {
   useRecorder,
   type PersonalityName,
 } from 'matinee'
+import { AGENT_PROMPT } from './agent-prompt'
 import { SCENE_BACKGROUND, SCENE_W, sceneBackdrop, sceneScript } from './scene'
 
 const PERSONALITY_NAMES: PersonalityName[] = ['confident', 'curious', 'caffeinated']
@@ -108,6 +109,13 @@ function Page({ personality, setPersonality, label, setLabel, trail, setTrail }:
     navigator.clipboard?.writeText('npm install matinee').catch(() => {})
     setCopied(true)
     setTimeout(() => setCopied(false), 1800)
+  }, [])
+
+  const [promptCopied, setPromptCopied] = useState(false)
+  const copyPrompt = useCallback(() => {
+    navigator.clipboard?.writeText(AGENT_PROMPT).catch(() => {})
+    setPromptCopied(true)
+    setTimeout(() => setPromptCopied(false), 2200)
   }, [])
 
   const perform = useCallback(async () => {
@@ -306,6 +314,36 @@ await cursor.say('and there it is')`}</code>
           Everything queues, so <code>await</code> is optional. Targets resolve when the step runs,
           not when you write it. The clicks are real events on real elements, which is why this page
           responds to its own cursor.
+        </p>
+      </section>
+
+      <section id="agent" className="section">
+        <h2>Or let an agent do it</h2>
+        <p className="note">
+          Paste this into Claude Code, Cursor, or whatever you use. It sends the agent to the
+          machine-readable docs first, tells it to read your actual components rather than guess
+          selectors, and includes the constraints that are easy to get wrong.
+        </p>
+
+        <div className="prompt">
+          <pre>
+            <code>{AGENT_PROMPT}</code>
+          </pre>
+          <button
+            id="copy-prompt"
+            className={`btn primary ${promptCopied ? 'is-on' : ''}`}
+            onClick={copyPrompt}
+          >
+            {promptCopied ? 'Copied to clipboard' : 'Copy prompt'}
+          </button>
+        </div>
+
+        <p className="note small">
+          Everything an agent needs is also served as plain text:{' '}
+          <a href="/llms.txt">/llms.txt</a> for the index,{' '}
+          <a href="/llms-full.txt">/llms-full.txt</a> for the whole API including the list of things
+          matinee deliberately does not do, and <a href="/agent-prompt.txt">/agent-prompt.txt</a>{' '}
+          for the prompt above.
         </p>
       </section>
 
