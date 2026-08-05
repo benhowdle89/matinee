@@ -1,0 +1,15 @@
+# Cloudflare Pages config for the demo site.
+#
+# Not deployed by CI — Ben wires the domain and connects the repo in the
+# Cloudflare dashboard. Once connected, these are the settings it needs:
+#
+#   Build command:        npm run demo:build
+#   Build output:         demo/dist
+#   Node version:         20
+#
+# Or from a terminal, without touching the dashboard:
+#   npm run demo:build && npx wrangler pages deploy demo/dist
+
+name = "matinee"
+compatibility_date = "2026-08-05"
+pages_build_output_dir = "demo/dist"

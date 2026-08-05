@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="An animated cursor performance">
+<style>.mt-cursor{transform:translate(870px,300px)}
+.mt-rip{fill:none;stroke:#2f6bff;stroke-width:2;opacity:0;transform-box:fill-box;transform-origin:center}
+.mt-chip-bg{fill:#2f6bff}
+.mt-chip-tx{fill:#fff;font-family:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:11.5px;font-weight:600;letter-spacing:.01em}
+@media (prefers-reduced-motion: no-preference){
+.mt-cursor{animation:mt-travel 6410ms linear infinite both}
+.mt-rip{animation:mt-ripple 6410ms linear infinite both}
+}
+@keyframes mt-travel{0%{transform:translate(250px,592px)}0%{transform:translate(249.84px,591.73px)}0.52%{transform:translate(250.41px,590.78px)}1.04%{transform:translate(253.79px,583.48px)}1.5601%{transform:translate(262.32px,566.15px)}2.0801%{transform:translate(275.88px,538.33px)}2.6001%{transform:translate(295.3px,502.24px)}3.1201%{transform:translate(319.17px,461.65px)}3.6401%{transform:translate(345.56px,420.77px)}4.1602%{transform:translate(372.73px,383.4px)}4.6802%{transform:translate(397.06px,352.48px)}5.2002%{transform:translate(417.03px,329.68px)}5.7202%{transform:translate(432.15px,313.9px)}6.2402%{transform:translate(443.47px,302.51px)}6.7603%{transform:translate(448.66px,297.73px)}7.2803%{transform:translate(448.55px,297.67px)}7.8003%{transform:translate(446.94px,299.41px)}8.3203%{transform:translate(443.79px,302.68px)}8.8404%{transform:translate(440.84px,305.29px)}9.3604%{transform:translate(440.02px,306px)}39.3136%{transform:translate(440.09px,305.77px)}39.8336%{transform:translate(439.27px,307.12px)}40.3536%{transform:translate(432.79px,312.06px)}40.8736%{transform:translate(419.48px,322.88px)}41.3937%{transform:translate(400.16px,336.84px)}41.9137%{transform:translate(375.88px,351.34px)}42.4337%{transform:translate(349.31px,364.84px)}42.9537%{transform:translate(324.11px,375.38px)}43.4737%{transform:translate(303.24px,384.2px)}43.9938%{transform:translate(287.69px,389.27px)}44.5138%{transform:translate(279.12px,393.16px)}45.0338%{transform:translate(278.52px,392.82px)}45.5538%{transform:translate(279.72px,392.91px)}46.0738%{transform:translate(282.34px,391.44px)}46.5939%{transform:translate(283.97px,391.05px)}53.6661%{transform:translate(284px,391px)}54.1342%{transform:translate(285.07px,391.97px)}64.5346%{transform:translate(285.45px,391.82px)}65.0546%{transform:translate(284px,390.99px)}65.5746%{transform:translate(285.66px,391.13px)}66.0946%{transform:translate(297.16px,393.37px)}66.6147%{transform:translate(324.12px,397.19px)}67.1347%{transform:translate(369.16px,401.62px)}67.6547%{transform:translate(432.4px,403.81px)}68.1747%{transform:translate(510.07px,400.22px)}68.6947%{transform:translate(594.31px,390.2px)}69.2148%{transform:translate(675.73px,374.13px)}69.7348%{transform:translate(746.26px,354.15px)}70.2548%{transform:translate(800.65px,334.56px)}70.7748%{transform:translate(837.55px,317.85px)}71.2949%{transform:translate(863.75px,303.17px)}71.8149%{transform:translate(881.81px,292.61px)}72.3349%{transform:translate(887.7px,289.02px)}72.8549%{transform:translate(887.14px,289.19px)}73.3749%{transform:translate(883.13px,291.86px)}73.895%{transform:translate(876.9px,295.72px)}74.415%{transform:translate(871.74px,298.98px)}74.935%{transform:translate(870.02px,300.01px)}75.039%{transform:translate(870px,300px)}75.039%{transform:translate(871.01px,300.97px)}84.9194%{transform:translate(871.41px,300.84px)}89.0796%{transform:translate(871.51px,300.76px)}89.0796%{transform:translate(870px,300px)}100%{transform:translate(870px,300px)}}
+@keyframes mt-ripple{
+0%{opacity:.55;transform:scale(.12)}
+9.6724%{opacity:0;transform:scale(1)}
+100%{opacity:0;transform:scale(1)}
+}</style>
+<rect width="100%" height="100%" fill="#faf8f4"/>
+<style>
+.hw-text{font-family:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+.hw-typed{clip-path:inset(0 0 0 0)}
+.hw-caret{opacity:0}
+@media (prefers-reduced-motion: no-preference){
+.hw-typed{animation:hw-type 6410ms linear infinite}
+.hw-caret{animation:hw-caret 6410ms steps(1,end) infinite,hw-caret-x 6410ms linear infinite}
+}
+@keyframes hw-type{
+0%,17.473%{clip-path:inset(0 100% 0 0)}
+39.002%{clip-path:inset(0 0 0 0)}
+100%{clip-path:inset(0 0 0 0)}
+}
+@keyframes hw-caret{
+0%,16.381%{opacity:0}
+17.473%{opacity:1}
+39.938%{opacity:1}
+40.874%,100%{opacity:0}
+}
+/* The caret rides the end of the text rather than waiting at the far end of
+   the field, in lockstep with the reveal above. */
+@keyframes hw-caret-x{
+0%,17.473%{transform:translateX(-148px)}
+39.002%{transform:translateX(0)}
+100%{transform:translateX(0)}
+}
+</style>
+
+<rect x="150" y="95" width="900" height="440" rx="14" fill="#fff" stroke="#e2ddd3" stroke-width="1.5"/>
+<path d="M150 140 h900" stroke="#e2ddd3" stroke-width="1.5"/>
+<circle cx="182" cy="118" r="5.5" fill="#e2ddd3"/>
+<circle cx="203" cy="118" r="5.5" fill="#e2ddd3"/>
+<circle cx="224" cy="118" r="5.5" fill="#e2ddd3"/>
+<rect x="262" y="107" width="420" height="22" rx="11" fill="#faf8f4"/>
+
+<rect x="200" y="186" width="286" height="16" rx="8" fill="#17161a" opacity="0.82"/>
+<rect x="200" y="220" width="430" height="11" rx="5.5" fill="#a8a298" opacity="0.5"/>
+<rect x="200" y="243" width="330" height="11" rx="5.5" fill="#a8a298" opacity="0.5"/>
+
+<rect x="200" y="280" width="480" height="52" rx="9" fill="#fff" stroke="#e2ddd3" stroke-width="1.5"/>
+<g class="hw-typed">
+<text class="hw-text" x="219" y="312.5" font-size="16" fill="#17161a">hello from matinee</text>
+</g>
+<rect class="hw-caret" x="367" y="294" width="1.8" height="24" fill="#2f6bff"/>
+
+<rect x="200" y="366" width="168" height="50" rx="9" fill="#17161a"/>
+<text class="hw-text" x="284" y="396.5" font-size="15" font-weight="600" fill="#fff" text-anchor="middle">Continue</text>
+
+<rect x="730" y="186" width="280" height="230" rx="11" fill="#faf8f4" stroke="#e2ddd3" stroke-width="1.5"/>
+<rect x="758" y="216" width="150" height="12" rx="6" fill="#a8a298" opacity="0.55"/>
+<rect x="758" y="248" width="224" height="9" rx="4.5" fill="#a8a298" opacity="0.34"/>
+<rect x="758" y="268" width="196" height="9" rx="4.5" fill="#a8a298" opacity="0.34"/>
+<rect x="758" y="288" width="210" height="9" rx="4.5" fill="#a8a298" opacity="0.34"/>
+<rect x="758" y="330" width="120" height="34" rx="8" fill="#fff" stroke="#e2ddd3" stroke-width="1.5"/>
+
+<rect x="200" y="470" width="140" height="10" rx="5" fill="#a8a298" opacity="0.32"/>
+<rect x="360" y="470" width="96" height="10" rx="5" fill="#a8a298" opacity="0.32"/>
+
+<g><circle class="mt-rip" cx="440" cy="306" r="20" style="animation-delay:1090ms"/><circle class="mt-rip" cx="440" cy="306" r="20" style="animation-delay:2590ms"/><circle class="mt-rip" cx="284" cy="391" r="20" style="animation-delay:3540ms"/></g>
+<g class="mt-cursor">
+<g transform="translate(-5,-2.5)">
+<path d="M5 2.5 L5 19.4 L9.2 15.3 L11.9 21.2 L14.6 20 L11.9 14.2 L17.6 14.2 Z" fill="#fff" stroke="rgba(17,17,20,0.92)" stroke-width="1.35" stroke-linejoin="round"/>
+</g>
+<g transform="translate(15,17)">
+<rect class="mt-chip-bg" width="51" height="21" rx="6"/>
+<text class="mt-chip-tx" x="9" y="14.5">Agent</text>
+</g>
+</g>
+</svg>

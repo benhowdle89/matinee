@@ -1,0 +1,13 @@
+# Hashed build assets are immutable; the HTML and the social card are not.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/hero.svg
+  Cache-Control: public, max-age=3600
+
+/og.png
+  Cache-Control: public, max-age=3600
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin

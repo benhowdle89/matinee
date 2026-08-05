@@ -40,7 +40,8 @@
     "prepublishOnly": "npm run typecheck && npm run test && npm run build",
     "demo": "vite --config demo/vite.config.ts",
     "demo:build": "vite build --config demo/vite.config.ts",
-    "hero": "vite build --config scripts/vite.hero.config.ts && node scripts/make-hero.mjs"
+    "hero": "npm run build && node scripts/make-hero.mjs && cp assets/hero.svg demo/public/hero.svg",
+    "og": "node scripts/make-og.mjs"
   },
   "peerDependencies": {
     "react": ">=18"

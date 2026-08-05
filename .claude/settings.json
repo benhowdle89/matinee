@@ -16,7 +16,12 @@
       "Bash(npx vitest *)",
       "Bash(npx tsc *)",
       "Bash(npm run *)",
-      "Bash(npm pack *)"
+      "Bash(npm pack *)",
+      "Bash(node scripts/make-hero.mjs)",
+      "Bash(node verify-hero.mjs)",
+      "Bash(node verify-demo.mjs)",
+      "Bash(kill %1)",
+      "Bash(pkill -f \"vite --config demo\")"
     ]
   }
 }

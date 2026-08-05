@@ -1,0 +1,337 @@
+/* Restrained and typographic. Warm off-white paper, near-black ink, and the
+   cursor is the only colour on the page. */
+
+:root {
+  --paper: #faf8f4;
+  --ink: #17161a;
+  --muted: #6b6862;
+  --rule: #e5e0d7;
+  --accent: #2f6bff;
+  --measure: 62ch;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: auto; /* matinee drives the scrolling; don't fight it */
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: ui-serif, Georgia, 'Times New Roman', serif;
+  font-size: 18px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+main {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 12vh 28px 8vh;
+}
+
+/* ---- hero ---- */
+
+.wordmark {
+  margin: 0;
+  font-family: ui-serif, Georgia, serif;
+  font-size: clamp(52px, 11vw, 92px);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.tagline {
+  margin: 14px 0 0;
+  font-size: clamp(20px, 3.4vw, 25px);
+  font-style: italic;
+  color: var(--muted);
+}
+
+.lede {
+  max-width: var(--measure);
+  margin: 28px 0 0;
+}
+
+.watching {
+  margin: 26px 0 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+}
+
+.watching .idle {
+  color: var(--muted);
+}
+
+.watching .live {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--accent);
+}
+
+.watching .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: blink 1.4s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ---- sections ---- */
+
+.section {
+  margin-top: 12vh;
+  padding-top: 40px;
+  border-top: 1px solid var(--rule);
+}
+
+h2 {
+  margin: 0 0 18px;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: ui-sans-serif, -apple-system, system-ui, sans-serif;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+h2.spaced {
+  margin-top: 44px;
+}
+
+.note {
+  max-width: var(--measure);
+  margin: 0 0 22px;
+  color: var(--muted);
+}
+
+.note.small {
+  margin-top: 16px;
+  font-size: 15px;
+}
+
+.note.error {
+  color: #b4331f;
+}
+
+/* ---- code ---- */
+
+code,
+pre {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.install-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.install-row code {
+  flex: 1 1 auto;
+  min-width: 240px;
+  padding: 13px 16px;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  background: #fff;
+  font-size: 15px;
+}
+
+.code {
+  margin: 0;
+  padding: 20px 22px;
+  overflow-x: auto;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  background: #fff;
+  font-size: 14.5px;
+  line-height: 1.62;
+}
+
+/* ---- controls ---- */
+
+.btn {
+  padding: 10px 16px;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  font-family: ui-sans-serif, -apple-system, system-ui, sans-serif;
+  font-size: 14.5px;
+  cursor: pointer;
+  transition:
+    border-color 140ms ease,
+    background 140ms ease,
+    color 140ms ease;
+}
+
+.btn:hover {
+  border-color: #c9c2b5;
+}
+
+.btn.is-on {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn.primary {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: #fff;
+}
+
+.btn.primary:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.btn.is-rec {
+  border-color: #b4331f;
+  color: #b4331f;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  margin-bottom: 30px;
+}
+
+fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+legend {
+  padding: 0 0 10px;
+  font-family: ui-sans-serif, -apple-system, system-ui, sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.actions {
+  margin-top: 30px;
+}
+
+.field {
+  padding: 10px 13px;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  font-family: ui-sans-serif, -apple-system, system-ui, sans-serif;
+  font-size: 15px;
+}
+
+.field:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.field.wide {
+  width: 100%;
+}
+
+.sample {
+  padding: 22px;
+  border: 1px dashed var(--rule);
+  border-radius: 10px;
+  background: #fff;
+}
+
+.sample legend {
+  padding: 0 8px;
+  margin-left: -8px;
+}
+
+/* ---- reasons ---- */
+
+.reasons {
+  margin: 0;
+  display: grid;
+  gap: 26px;
+}
+
+.reasons dt {
+  font-weight: 600;
+  font-size: 17px;
+}
+
+.reasons dd {
+  max-width: var(--measure);
+  margin: 6px 0 0;
+  color: var(--muted);
+}
+
+/* ---- footer ---- */
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+  margin-top: 12vh;
+  padding-top: 30px;
+  border-top: 1px solid var(--rule);
+  font-family: ui-sans-serif, -apple-system, system-ui, sans-serif;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.footer a {
+  color: var(--ink);
+  text-decoration-color: var(--rule);
+  text-underline-offset: 3px;
+}
+
+.footer a:hover {
+  text-decoration-color: var(--accent);
+}
+
+@media (max-width: 680px) {
+  body {
+    font-size: 17px;
+  }
+  main {
+    padding: 8vh 20px 6vh;
+  }
+  .section {
+    margin-top: 9vh;
+  }
+  .controls {
+    gap: 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .watching .dot {
+    animation: none;
+  }
+}
