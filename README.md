@@ -28,16 +28,7 @@ Either way you end up with a binary file that was accurate on the day it was mad
 
 ## What matinee does
 
-You write the demo as **code**. A ghost cursor performs it against your real, running app, driving it with real events, moving like a hand rather than a tween.
-
-```tsx
-await cursor.moveTo('#search')
-await cursor.type('#search', 'invoices from March')
-await cursor.click('#submit')
-await cursor.say('and there it is')
-```
-
-Then the performance exports itself: as an animated SVG for a README, as a WebM for a launch video, or as a still.
+You write the demo as **code**. A ghost cursor performs it against your real, running app, driving it with real events, moving like a hand rather than a tween. Then it exports itself as a file you can commit.
 
 Three things follow from the demo being code:
 
@@ -71,7 +62,7 @@ Show the click path instead of describing it. "Open settings, then billing, then
 
 **Marketing and social**
 
-Record the tab to WebM and post it. Same script, different personality, different nameplate, different accent colour, so one performance yields a family of assets.
+Record the tab to WebM and post it. Same script, different personality, nameplate and accent colour, so one performance yields a family of assets.
 
 </td>
 <td valign="top">
@@ -87,7 +78,7 @@ The cursor drives the real UI, so a guided tour can genuinely do the thing rathe
 
 **Agent and AI product demos**
 
-Every AI product demo shows a cursor using software on the user's behalf. matinee is built for exactly that shot, nameplate and all, without pretending an agent is driving when one is not.
+Every AI product demo shows a cursor using software on the user's behalf. matinee is built for exactly that shot, nameplate and all.
 
 </td>
 <td valign="top">
@@ -100,13 +91,19 @@ A script is a precise, replayable description of an interaction. Attach it to th
 </tr>
 </table>
 
-## Curtain up
+---
+
+# 1. Install
 
 ```sh
 npm install matinee
 ```
 
-Two lines to integrate:
+React 18 or newer. Zero runtime dependencies.
+
+# 2. Use it
+
+Wrap your app. This is the entire integration:
 
 ```tsx
 import { Stage } from 'matinee'
@@ -119,14 +116,11 @@ import 'matinee/styles.css'
 
 `<Stage>` renders your app untouched and mounts one fixed, `pointer-events: none`, `aria-hidden` overlay beside it. It cannot affect your layout, cannot intercept a click, and renders nothing on the server.
 
-## Your first performance
-
-A complete, working example. This is the whole file.
+Then direct the performance from anywhere inside it:
 
 ```tsx
 import { useEffect } from 'react'
-import { Stage, useCursor } from 'matinee'
-import 'matinee/styles.css'
+import { useCursor } from 'matinee'
 
 function Demo() {
   const cursor = useCursor()
@@ -143,32 +137,155 @@ function Demo() {
 
   return <YourApp />
 }
-
-export default () => (
-  <Stage label="Agent" personality="confident" trail>
-    <Demo />
-  </Stage>
-)
 ```
 
-Every method returns a promise that resolves when the motion finishes, and queues if you call it while something else is running. `await` is optional; the order is always the order you wrote.
+That is a working demo. Three things worth knowing:
 
-Targets are a CSS selector, an `Element`, a ref, or `{ x, y }`, and they resolve **at execution time, not call time**. By the time a queued click runs, the page has usually moved on.
+- **Everything queues.** Each method returns a promise that resolves when the motion finishes, and waits its turn if something else is running. `await` is optional; the order is always the order you wrote.
+- **Targets resolve at execution time, not call time.** A target is a CSS selector, an `Element`, a ref, or `{ x, y }`. By the time a queued click runs, the page has usually moved on, and matinee looks it up then.
+- **The events are real.** Clicks dispatch actual `pointerdown` / `pointerup` / `click` on the actual element, so your app responds exactly as it would to a hand. Typing goes through the prototype value setter, which is what makes React-controlled inputs update instead of silently ignoring it.
 
-Clicks dispatch real `pointerdown` / `pointerup` / `click` events on the real element, so your app responds exactly as it would to a hand. Typing goes through the prototype value setter, which is what makes React-controlled inputs actually update instead of silently ignoring it.
+# 3. What you get out
 
-## Why the motion looks right
+One performance. Four different artefacts, depending on what you pass.
 
-This is the part everything else rests on. A cursor that lerps between two points reads as a computer instantly. Four things fix that:
+### An animated SVG, self-contained
 
-- **Curved paths.** Every journey is a cubic bezier whose control points are pushed perpendicular to the straight line, randomised within the personality's bounds. Two trips between the same two buttons never trace the same arc.
-- **Minimum-jerk velocity.** The easing is `10t³ − 15t⁴ + 6t⁵`, the standard model from motor control research for how a human arm moves between two points. It was not picked by eye.
-- **Overshoot and settle.** Human reaching is two movements, not one: a fast ballistic throw that lands slightly wrong, then a small corrective one. matinee models both. A single smooth arrival is the tell that gives away every tweened cursor.
-- **A tremor underneath.** Sub-pixel, never repeating, fading out as the cursor settles.
+<img src="assets/export-clip.svg" alt="A cursor clicking a field then a button on a wireframe card" width="560">
+
+Pass a background and some scenery and the file stands alone. This is what the hero at the top of this page is.
+
+```ts
+const svg = cursor.toSvg({
+  background: '#faf8f4',
+  backdrop: '<rect x="24" y="24" width="512" height="212" rx="10" fill="#fff"/>',
+})
+```
+
+`backdrop` is raw SVG markup drawn behind the cursor. Anything you can draw, you can stage.
+
+### An animated SVG, transparent (the default)
+
+<img src="assets/export-overlay.svg" alt="A cursor and a click ripple on a transparent background" width="560">
+
+```ts
+const svg = cursor.toSvg()
+```
+
+That is the same performance with no scenery: the cursor, the nameplate and the click ripples, on nothing. It looks sparse on its own **because it is meant to go on top of something**, a screenshot or a slide or a video still you already have. Transparent is the default for exactly this reason.
+
+### The same performance, restyled
+
+<img src="assets/export-styled.svg" alt="The same performance in orange with a Claude nameplate" width="560">
+
+```ts
+const svg = cursor.toSvg({
+  color: '#c2410c',
+  label: 'Claude',
+  background: '#fffaf5',
+  backdrop,
+})
+```
+
+One script, a family of assets. Change the personality too and the motion changes with it.
+
+### A path still, as PNG
+
+<img src="assets/export-path.png" alt="The curved path the cursor travelled, with a ring at each click" width="560">
+
+```ts
+const blob = await cursor.toPathPng()
+```
+
+The journey with a marker at every click, on transparency, fading in so the direction reads. Good for a slide or a diagram.
+
+### A video, as WebM
+
+```tsx
+const recorder = useRecorder()
+
+<button onClick={recorder.start}>Record</button>
+<button onClick={recorder.stop}>Stop</button>
+<button onClick={() => recorder.download('demo.webm')}>Download</button>
+```
+
+Honestly: this wraps `getDisplayMedia` and `MediaRecorder`, so it records the real tab and it costs one browser permission prompt. There is no way around the prompt, and there should not be. A page should not be able to capture itself unasked. matinee does not attempt to render the DOM to a canvas; that road produces something subtly wrong for every non-trivial page.
+
+## Configuring the SVG export
+
+| Option | Type | Default | What it does |
+|---|---|---|---|
+| `background` | `'transparent' \| string` | `'transparent'` | Fills the canvas. Leave it transparent to overlay a screenshot; set a colour for a standalone clip. |
+| `backdrop` | `string` | none | Raw SVG markup drawn behind the cursor. Your scenery. |
+| `label` | `string \| false` | `'Agent'` | The nameplate. `false` removes it and its styles. |
+| `color` | `string` | `#2f6bff` | Nameplate and ripple accent. |
+| `width` | `number` | recorded width | Rendered width. The `viewBox` keeps the aspect ratio. |
+| `loop` | `boolean` | `true` | `false` plays once and holds the last frame. |
+| `traits` | `Traits` | Stage personality | Overrides the motion character for this export only. |
+| `fps` | `number` | `24` | Sample rate. Higher is smoother and larger. |
+
+Called from a `<Stage>`, `toSvg()` inherits that stage's colour and personality, so most of the time you pass nothing.
+
+## What is actually in the file
+
+A complete, real export of a two-step performance, in full:
+
+```svg
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200" viewBox="0 0 400 200">
+<style>
+  /* the still frame, for anyone with reduced motion turned on */
+  .mt-cursor { transform: translate(300px, 70px) }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .mt-cursor { animation: mt-travel 1500ms linear infinite both }
+    .mt-rip    { animation: mt-ripple 1500ms linear infinite both }
+  }
+
+  /* the motion: one keyframe per sampled position of the real curve */
+  @keyframes mt-travel {
+    0%       { transform: translate(40px, 160px) }
+    8.3333%  { transform: translate(100.59px, 129.93px) }
+    16.6667% { transform: translate(256.62px, 77.12px) }
+    25%      { transform: translate(309.83px, 68.71px) }   /* the overshoot */
+    33.3333% { transform: translate(300px, 70px) }         /* settled */
+    100%     { transform: translate(300px, 70px) }
+  }
+</style>
+
+<!-- one circle per click, fired at the recorded moment via animation-delay -->
+<circle class="mt-rip" cx="300" cy="70" r="20" style="animation-delay:870ms"/>
+
+<!-- the only thing that moves: the arrow and its nameplate -->
+<g class="mt-cursor">
+  <path d="M5 2.5 L5 19.4 …" fill="#fff" stroke="rgba(17,17,20,0.92)"/>
+  <g transform="translate(15,17)">
+    <rect class="mt-chip-bg" width="51" height="21" rx="6"/>
+    <text class="mt-chip-tx" x="9" y="14.5">Agent</text>
+  </g>
+</g>
+</svg>
+```
+
+- The keyframes are not a path plus an easing function. They are **literally where the cursor was**, sampled from the same motion code that ran on screen, which is how the overshoot at `25%` survives into the file.
+- The `viewBox` is your page's coordinate space, so the cursor lands where it landed.
+- There is no `<script>` and no external reference of any kind. That is precisely the shape GitHub's image sandbox renders: it serves the file under `default-src 'none'; style-src 'unsafe-inline'; sandbox`, which allows an inline `<style>` block and nothing else.
+- **It never contains your app.** matinee does not rasterise the DOM, so the export has no idea what your page looks like. That is a deliberate limit: every DOM-to-image approach produces something subtly wrong for any non-trivial page.
+
+One consequence worth knowing: because the export has no concept of scroll offset, a performance containing `scrollTo` cannot line up with a single static image. Keep exportable takes scroll-free.
+
+### Putting one in a README
+
+```md
+<img src="assets/hero.svg" width="720">
+```
+
+That is the whole trick, and it is why the animation at the top of this page moves.
+
+---
 
 ## Personalities
 
-One prop changes the whole character of the performance. Same script in all three:
+One prop changes the character of the whole performance. Same script in all three:
 
 <table>
 <tr>
@@ -192,7 +309,18 @@ One prop changes the whole character of the performance. Same script in all thre
 <Stage personality="caffeinated" />
 ```
 
-## The actor
+## Why the motion looks right
+
+This is the part everything else rests on. A cursor that lerps between two points reads as a computer instantly. Four things fix that:
+
+- **Curved paths.** Every journey is a cubic bezier whose control points are pushed perpendicular to the straight line, randomised within the personality's bounds. Two trips between the same two buttons never trace the same arc.
+- **Minimum-jerk velocity.** The easing is `10t³ − 15t⁴ + 6t⁵`, the standard model from motor control research for how a human arm moves between two points. It was not picked by eye.
+- **Overshoot and settle.** Human reaching is two movements, not one: a fast ballistic throw that lands slightly wrong, then a small corrective one. matinee models both. A single smooth arrival is the tell that gives away every tweened cursor.
+- **A tremor underneath.** Sub-pixel, never repeating, fading out as the cursor settles.
+
+## API
+
+### The actor
 
 ```ts
 const cursor = useCursor()
@@ -212,7 +340,7 @@ const cursor = useCursor()
 | `getScript()` / `play(script)` | The performance as data, and back again |
 | `toSvg()` / `toPathPng()` | Exports |
 
-## The stage
+### The stage
 
 | Prop | Type | Default | |
 |---|---|---|---|
@@ -225,55 +353,6 @@ const cursor = useCursor()
 | `zIndex` | `number` | `9999` | |
 | `respectReducedMotion` | `boolean` | `true` | Jump-cuts instead of animating under `prefers-reduced-motion` |
 | `onScriptChange` | `(script: Script) => void` |  | Fires as the performance is recorded |
-
-## Exports
-
-### Animated SVG, the one that matters
-
-```ts
-const svg = cursor.toSvg({ width: 720 })
-```
-
-**This animates inside a GitHub README.** That is the whole trick, and it is why the hero at the top of this page moves. Drop it in with plain markdown:
-
-```md
-<img src="assets/hero.svg" width="720">
-```
-
-The file is entirely self-contained. The keyframes, the glyph, the nameplate and the colour are all inline. There is no `<script>` tag and no external reference of any kind, because that is precisely the shape GitHub's image sandbox will render: it serves the file under `default-src 'none'; style-src 'unsafe-inline'; sandbox`, which permits an inline `<style>` block and nothing else.
-
-Transparent by default, so it sits on top of a screenshot you already have. The animation is wrapped in `@media (prefers-reduced-motion: no-preference)`, so a reader who has asked for less motion gets a composed still instead.
-
-**One thing to know:** `toSvg()` exports the cursor, not your page. matinee never rasterises the DOM. On its own you get the motion on transparency, ready to lay over your own screenshot. To produce a self-contained clip like the hero, pass scenery:
-
-```ts
-cursor.toSvg({
-  background: '#faf8f4',
-  backdrop: '<rect x="20" y="20" width="380" height="190" rx="10" fill="#fff"/>',
-})
-```
-
-Because the export has no concept of scroll offset, a performance containing `scrollTo` cannot line up with any single static image. Keep exportable takes scroll-free.
-
-### Video
-
-```tsx
-const recorder = useRecorder()
-
-<button onClick={recorder.start}>Record</button>
-<button onClick={recorder.stop}>Stop</button>
-<button onClick={() => recorder.download('demo.webm')}>Download</button>
-```
-
-Honestly: this wraps `getDisplayMedia` and `MediaRecorder`, so it records the real tab and it costs one browser permission prompt. There is no way around the prompt, and there should not be. A page should not be able to capture itself unasked. matinee does not attempt to render the DOM to a canvas; that road produces something subtly wrong for every non-trivial page.
-
-### Path PNG
-
-```ts
-const blob = await cursor.toPathPng()
-```
-
-A still of the journey with a marker at every click, on transparency.
 
 ## Scripts
 
@@ -297,10 +376,6 @@ The overlay is `aria-hidden` and `pointer-events: none`, always. `respectReduced
 - **[ghost-cursor](https://github.com/Xetera/ghost-cursor)**: human-like mouse movement for Puppeteer, built for bot evasion. matinee stages performances; it is not a disguise.
 - **[Screen Studio](https://screen.studio)**: records your real screen beautifully. matinee performs your app instead of filming it, which means it re-renders when the UI changes.
 - **[rrweb](https://github.com/rrweb-io/rrweb)**: records and replays real user sessions. matinee's scripts are written, not captured.
-
-## Requirements
-
-React 18 or newer. Zero runtime dependencies.
 
 ## License
 

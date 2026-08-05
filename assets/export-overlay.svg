@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="260" viewBox="0 0 560 260" role="img" aria-label="An animated cursor performance">
+<style>.mt-cursor{transform:translate(111px,175px)}
+.mt-rip{fill:none;stroke:#2f6bff;stroke-width:2;opacity:0;transform-box:fill-box;transform-origin:center}
+.mt-chip-bg{fill:#2f6bff}
+.mt-chip-tx{fill:#fff;font-family:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:11.5px;font-weight:600;letter-spacing:.01em}
+@media (prefers-reduced-motion: no-preference){
+.mt-cursor{animation:mt-travel 2840ms linear infinite both}
+.mt-rip{animation:mt-ripple 2840ms linear infinite both}
+}
+@keyframes mt-travel{0%{transform:translate(70px,232px)}0%{transform:translate(70.13px,231.95px)}1.1737%{transform:translate(71.35px,231.36px)}2.3474%{transform:translate(78.49px,227.58px)}3.5211%{transform:translate(93.82px,219.09px)}4.6948%{transform:translate(114.2px,205.53px)}5.8685%{transform:translate(135.97px,187.92px)}7.0423%{transform:translate(156.88px,167.59px)}8.216%{transform:translate(174.18px,148.22px)}9.3897%{transform:translate(186.32px,132.43px)}10.5634%{transform:translate(195.01px,121.13px)}11.7371%{transform:translate(199.37px,115.76px)}12.9108%{transform:translate(199.15px,115.12px)}14.0845%{transform:translate(198.11px,117.23px)}15.2582%{transform:translate(196.69px,118.97px)}16.4319%{transform:translate(195.99px,120.02px)}30.2817%{transform:translate(196.18px,120.16px)}31.4554%{transform:translate(194.7px,120.64px)}32.6291%{transform:translate(187.97px,122.72px)}33.8028%{transform:translate(173.77px,128.83px)}34.9765%{transform:translate(154.65px,139.66px)}36.1502%{transform:translate(135.45px,152.42px)}37.3239%{transform:translate(121.6px,163.41px)}38.4977%{transform:translate(113.93px,171.04px)}39.6714%{transform:translate(109.87px,176.64px)}40.8451%{transform:translate(109.09px,178.08px)}42.0188%{transform:translate(109.1px,177.08px)}43.1925%{transform:translate(110.76px,175.53px)}44.3662%{transform:translate(110.99px,175px)}57.7465%{transform:translate(111px,175px)}57.7465%{transform:translate(111.4px,175.91px)}74.1784%{transform:translate(111.81px,175.93px)}75.3521%{transform:translate(111.84px,175.93px)}75.3521%{transform:translate(111px,175px)}100%{transform:translate(111px,175px)}}
+@keyframes mt-ripple{
+0%{opacity:.55;transform:scale(.12)}
+21.831%{opacity:0;transform:scale(1)}
+100%{opacity:0;transform:scale(1)}
+}</style>
+
+<g><circle class="mt-rip" cx="196" cy="120" r="20" style="animation-delay:930ms"/><circle class="mt-rip" cx="111" cy="175" r="20" style="animation-delay:1710ms"/></g>
+<g class="mt-cursor">
+<g transform="translate(-5,-2.5)">
+<path d="M5 2.5 L5 19.4 L9.2 15.3 L11.9 21.2 L14.6 20 L11.9 14.2 L17.6 14.2 Z" fill="#fff" stroke="rgba(17,17,20,0.92)" stroke-width="1.35" stroke-linejoin="round"/>
+</g>
+<g transform="translate(15,17)">
+<rect class="mt-chip-bg" width="51" height="21" rx="6"/>
+<text class="mt-chip-tx" x="9" y="14.5">Agent</text>
+</g>
+</g>
+</svg>
