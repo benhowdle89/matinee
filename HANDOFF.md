@@ -51,6 +51,37 @@ This got the most iteration time, per the brief. Four things do the work:
 `sampleMotion` is a pure function and lands exactly on target at `t=1`, which
 is what lets the SVG exporter reproduce the motion without a DOM.
 
+## The hero, verified rather than assumed
+
+The brief asked for this to be checked, not believed, so:
+
+- Loaded `assets/hero.svg` through an `<img>` tag in Chrome — the sandboxed
+  context, not inlined — and screenshotted seven points across the loop. All
+  six frame pairs differ.
+- Fetched the exact bytes GitHub serves at
+  `github.com/benhowdle89/matinee/raw/main/assets/hero.svg`. All 7,229 arrive
+  intact: 67 translate keyframes, 3 ripples, the reduced-motion guard, zero
+  `<script>` tags, zero external references.
+- The response carries
+  `content-security-policy: default-src 'none'; style-src 'unsafe-inline'; sandbox`.
+  That `style-src 'unsafe-inline'` is the load-bearing clause — it is what
+  permits the inline `<style>` block the animation lives in, while `sandbox`
+  and `default-src 'none'` kill scripts and external fetches. The export is
+  built to fit exactly that hole.
+
+## One thing about your machine, not this repo
+
+There is a stray `node_modules` at **`~/node_modules`** containing (among other
+things) `@types/node`. TypeScript walks *up* the directory tree looking for
+`node_modules`, so that directory silently satisfies imports for **every
+project under your home directory**. It is why `@types/node` being missing from
+this package was invisible locally and only surfaced in CI.
+
+Worth deleting, or at least knowing about — it will mask a missing dependency
+again. It is also why I stopped trusting `npm run typecheck` on this machine
+and reproduced CI properly (clean copy under `/private/tmp`, `npm ci`, no
+`dist/`) before believing the fix.
+
 ## Deliberately cut — your v0.2 menu
 
 Straight from the non-goals list, untouched and unscaffolded:
