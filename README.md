@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/hero.svg" alt="A cursor moving across a wireframe interface, clicking into a field, typing, and pressing a button" width="720">
+<img src="https://raw.githubusercontent.com/benhowdle89/matinee/main/assets/hero.svg" alt="A cursor moving across a wireframe interface, clicking into a field, typing, and pressing a button" width="720">
 
 # matinee
 
@@ -151,7 +151,7 @@ One performance. Four different artefacts, depending on what you pass.
 
 ### An animated SVG, self-contained
 
-<img src="assets/export-clip.svg" alt="A cursor clicking a field then a button on a wireframe card" width="560">
+<img src="https://raw.githubusercontent.com/benhowdle89/matinee/main/assets/export-clip.svg" alt="A cursor clicking a field then a button on a wireframe card" width="560">
 
 Pass a background and some scenery and the file stands alone. This is what the hero at the top of this page is.
 
@@ -166,7 +166,7 @@ const svg = cursor.toSvg({
 
 ### An animated SVG, transparent (the default)
 
-<img src="assets/export-overlay.svg" alt="A cursor and a click ripple on a transparent background" width="560">
+<img src="https://raw.githubusercontent.com/benhowdle89/matinee/main/assets/export-overlay.svg" alt="A cursor and a click ripple on a transparent background" width="560">
 
 ```ts
 const svg = cursor.toSvg()
@@ -176,7 +176,7 @@ That is the same performance with no scenery: the cursor, the nameplate and the 
 
 ### The same performance, restyled
 
-<img src="assets/export-styled.svg" alt="The same performance in orange with a Claude nameplate" width="560">
+<img src="https://raw.githubusercontent.com/benhowdle89/matinee/main/assets/export-styled.svg" alt="The same performance in orange with a Claude nameplate" width="560">
 
 ```ts
 const svg = cursor.toSvg({
@@ -191,7 +191,7 @@ One script, a family of assets. Change the personality too and the motion change
 
 ### A path still, as PNG
 
-<img src="assets/export-path.png" alt="The curved path the cursor travelled, with a ring at each click" width="560">
+<img src="https://raw.githubusercontent.com/benhowdle89/matinee/main/assets/export-path.png" alt="The curved path the cursor travelled, with a ring at each click" width="560">
 
 ```ts
 const blob = await cursor.toPathPng()
@@ -294,9 +294,9 @@ One prop changes the character of the whole performance. Same script in all thre
 <th align="center">caffeinated</th>
 </tr>
 <tr>
-<td><img src="assets/personality-confident.svg" alt="A cursor moving briskly with a shallow curve" width="300"></td>
-<td><img src="assets/personality-curious.svg" alt="A cursor wandering on a wide curve" width="300"></td>
-<td><img src="assets/personality-caffeinated.svg" alt="A cursor darting quickly and overshooting" width="300"></td>
+<td><img src="https://raw.githubusercontent.com/benhowdle89/matinee/main/assets/personality-confident.svg" alt="A cursor moving briskly with a shallow curve" width="300"></td>
+<td><img src="https://raw.githubusercontent.com/benhowdle89/matinee/main/assets/personality-curious.svg" alt="A cursor wandering on a wide curve" width="300"></td>
+<td><img src="https://raw.githubusercontent.com/benhowdle89/matinee/main/assets/personality-caffeinated.svg" alt="A cursor darting quickly and overshooting" width="300"></td>
 </tr>
 <tr>
 <td align="center">brisk, low curvature,<br>slight overshoot</td>
