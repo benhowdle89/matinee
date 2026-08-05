@@ -21,7 +21,9 @@
       "Bash(node verify-hero.mjs)",
       "Bash(node verify-demo.mjs)",
       "Bash(kill %1)",
-      "Bash(pkill -f \"vite --config demo\")"
+      "Bash(pkill -f \"vite --config demo\")",
+      "Bash(gh run *)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\('files:'\\); [print\\(' ', f\\) for f in d.get\\('files',[]\\)]\")"
     ]
   }
 }
