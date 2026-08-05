@@ -7,10 +7,19 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Stage, useCursor, useRecorder, type PersonalityName } from 'matinee'
+import {
+  PERSONALITIES,
+  scriptToSvg,
+  Stage,
+  useCursor,
+  useRecorder,
+  type PersonalityName,
+} from 'matinee'
+import { SCENE_BACKGROUND, SCENE_W, sceneBackdrop, sceneScript } from './scene'
 
-const PERSONALITIES: PersonalityName[] = ['confident', 'curious', 'caffeinated']
+const PERSONALITY_NAMES: PersonalityName[] = ['confident', 'curious', 'caffeinated']
 const NARROW = 680
+const ACCENT = '#2f6bff'
 
 export function App() {
   const [personality, setPersonality] = useState<PersonalityName>('confident')
@@ -18,7 +27,7 @@ export function App() {
   const [trail, setTrail] = useState(false)
 
   return (
-    <Stage personality={personality} label={label || false} trail={trail} color="#2f6bff">
+    <Stage personality={personality} label={label || false} trail={trail} color={ACCENT}>
       <Page
         personality={personality}
         setPersonality={setPersonality}
@@ -101,7 +110,19 @@ function Page({
   }, [perform])
 
   const downloadSvg = useCallback(() => {
-    const svg = cursor.toSvg({ width: 900, label: label || false })
+    // A purpose-built take over a wireframe stage, rather than this page's
+    // performance. toSvg() exports the cursor, not the page, so exporting what
+    // just happened here would hand the visitor a cursor floating in a void.
+    // See demo/scene.ts.
+    const svg = scriptToSvg(sceneScript(), {
+      width: SCENE_W,
+      background: SCENE_BACKGROUND,
+      backdrop: sceneBackdrop(ACCENT),
+      color: ACCENT,
+      label: label || false,
+      traits: PERSONALITIES[personality],
+      fps: 30,
+    })
     const blob = new Blob([svg], { type: 'image/svg+xml' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
@@ -109,7 +130,7 @@ function Page({
     a.download = 'matinee.svg'
     a.click()
     URL.revokeObjectURL(url)
-  }, [cursor, label])
+  }, [label, personality])
 
   return (
     <main>
@@ -172,7 +193,7 @@ await cursor.say('and there it is')`}</code>
           <fieldset>
             <legend>Personality</legend>
             <div className="row">
-              {PERSONALITIES.map((p) => (
+              {PERSONALITY_NAMES.map((p) => (
                 <button
                   key={p}
                   id={`personality-${p}`}
@@ -225,7 +246,7 @@ await cursor.say('and there it is')`}</code>
           </button>
 
           <button className="btn" onClick={downloadSvg}>
-            Download as SVG
+            Download a clip
           </button>
 
           {recorder.supported && (
@@ -244,6 +265,12 @@ await cursor.say('and there it is')`}</code>
           )}
         </div>
 
+        <p className="note small">
+          The clip is a self-contained animated SVG that will play inside a GitHub README, staged
+          on a wireframe with your personality and nameplate. It is not a recording of this page:{' '}
+          <code>toSvg()</code> exports the cursor, never the DOM, so on its own it gives you the
+          motion on transparency to lay over a screenshot of your own.
+        </p>
         {recorder.supported && (
           <p className="note small">
             Recording asks the browser for permission and captures the real tab. There is no way

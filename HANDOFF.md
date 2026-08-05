@@ -23,7 +23,31 @@ A single package, no monorepo, zero runtime dependencies, 34.7 kB packed.
 - **Demo site** in `demo/`, which performs itself on load.
 - **Assets**: `assets/hero.svg`, `assets/og.png`, both mirrored into
   `demo/public/`.
-- 62 tests, CI on push, release on tag.
+- 103 tests plus an install-from-source check, CI on push, release on tag.
+
+## The test suite
+
+Six files, 103 tests, in roughly increasing distance from the code:
+
+| File | Covers |
+|---|---|
+| `motion.test.ts` | The maths. Bezier endpoints, the bow cap, minimum-jerk symmetry, duration clamping, seeded determinism, that the cursor overshoots and still lands exactly on target. |
+| `script.test.ts` | The actor. Recording, replay round-trip through `JSON.stringify`, queue ordering, real event dispatch, native-setter typing, reduced motion, teardown. |
+| `stage.test.tsx` | React. Renders with `react-dom/client`: children untouched, one inert overlay, every `<Stage>` prop, two Stages not fighting, a controlled input actually updating. |
+| `ssr.test.tsx` | Server rendering, in the `node` environment so the SSR guards are genuinely exercised. Under happy-dom there is a `window` and the test would pass while the real thing threw. |
+| `export-svg.test.ts` | The SVG as data: keyframe counts, ripple timings, escaping, reduced-motion guard, no `<script>`, nothing external. |
+| `export.test.tsx` | All three exports through the public API, including `useRecorder` against a fake `MediaRecorder` and `toPathPng` against a recording canvas stub. |
+
+`npm run verify` is the one that matters most and is not part of `npm test`: it
+packs a tarball, installs it into a throwaway project, and uses it as a
+consumer would. ESM and CJS entry points, the `matinee/styles.css` subpath, the
+shipped `.d.ts` compiled against a realistic consumer component, server
+rendering, and the dependency list. The unit suite imports from `./src` and so
+proves none of that. It runs in CI after the build, and in `prepublishOnly`.
+
+It is also checked against itself: planting a runtime dependency in
+`package.json` makes it fail and exit non-zero, so it is not a check that
+cannot fail.
 
 ## The motion, and why it is built the way it is
 
@@ -159,6 +183,21 @@ look at them on a real demo before you're happy.
   24fps over a nine-second clip I can't tell, and the alternative is storing
   thousands of sampled points in every script. But it isn't a frame-exact
   recording and shouldn't be described as one.
+- **`toSvg()` exports the cursor, never the page,** and a performance that
+  scrolls cannot be laid over a screenshot. Recorded points are viewport
+  coordinates and the export has no notion of a scroll offset, so points
+  captured either side of a `scrollTo` are in frames that no longer relate to
+  each other. The motion stays continuous and correct; it just will not line up
+  with any single static image. Two ways out if this ever matters: record
+  `window.scrollY` on each step and have the exporter translate the scene
+  between scrolls, or keep exportable performances scroll-free. The demo takes
+  the second route, in `demo/scene.ts`.
+- **A bare export is an anticlimax.** With the default transparent background
+  and no `backdrop`, you get a cursor moving through empty space. That is the
+  right default for laying over your own screenshot, and a poor souvenir on its
+  own, which is why both the README hero and the demo's download button pass a
+  hand-drawn `backdrop`. Worth knowing before anyone calls `toSvg()` and
+  wonders where their app went.
 - **`toSvg()` doesn't render captions.** `say()` shows a speech bubble live,
   but the SVG exporter ignores `say` steps except as a pause. If a caption is
   the punchline of your demo, the SVG will miss it. Probably the first export
@@ -179,9 +218,13 @@ look at them on a real demo before you're happy.
   (lands on target, overshoots, stays finite, is deterministic) and by
   screenshots I looked at once. There's nothing stopping a future change making
   it *ugly* while staying green.
-- **`useRecorder` is untested.** `getDisplayMedia` needs a real permission
-  prompt; I wrote it carefully and did not exercise it. Worth clicking once
-  before you tell anyone about it.
+- **`useRecorder` is tested against a fake, not a browser.** `export.test.tsx`
+  drives it with a stub `MediaRecorder` and `getDisplayMedia`, which covers the
+  logic worth covering: codec negotiation, the blob and object URL, releasing
+  the capture on stop and on unmount, a declined prompt treated as a normal
+  outcome rather than an error. What it cannot cover is the real permission
+  dialog and real codecs. Worth clicking once yourself before you tell anyone
+  about it.
 - **The demo autoplays on load.** Guarded by `prefers-reduced-motion` and it
   only fires once, but some people will still find it presumptuous.
 
@@ -241,8 +284,9 @@ only hand-rolled tags that need `git tag -a`.
 
 ```sh
 npm run typecheck     # tsc --noEmit
-npm test              # 62 tests, happy-dom
+npm test              # 103 tests, happy-dom (plus one node-env file for SSR)
 npm run build         # tsup -> ESM + CJS + .d.ts + styles.css
+npm run verify        # pack, install into a temp project, use it as a consumer
 npm run demo          # the demo site, localhost
 npm run hero          # rebuild assets/hero.svg
 npm run og            # rebuild assets/og.svg

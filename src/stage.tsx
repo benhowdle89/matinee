@@ -121,7 +121,16 @@ export function Stage({
     actor?.setHandlers({ onScriptChange })
   }, [actor, onScriptChange])
 
-  const value = useMemo<Cursor>(() => makeCursor(actor, traits, color), [actor, traits, color])
+  // Read through refs so the handle keeps one identity for the life of the
+  // Stage. Memoising on `traits`/`color` would hand out a new object every
+  // time the personality changed, re-firing any consumer effect that depends
+  // on the cursor, which for most apps means restarting the performance.
+  const traitsRef = useRef(traits)
+  traitsRef.current = traits
+  const colorRef = useRef(color)
+  colorRef.current = color
+
+  const value = useMemo<Cursor>(() => makeCursor(actor, traitsRef, colorRef), [actor])
 
   return (
     <StageContext.Provider value={value}>
@@ -156,8 +165,8 @@ export function useCursor(): Cursor {
  */
 function makeCursor(
   actor: Actor | null,
-  traits: ReturnType<typeof traitsFor>,
-  color: string,
+  traits: { current: ReturnType<typeof traitsFor> },
+  color: { current: string },
 ): Cursor {
   const noop = (): Promise<void> => Promise.resolve()
   const emptyScript = (): Script => ({
@@ -205,8 +214,18 @@ function makeCursor(
     getScript: () => actor.getScript(),
     clearScript: () => actor.clearScript(),
     play: (s) => actor.play(s),
-    toSvg: (options) => scriptToSvg(actor.getScript(), { traits, color, ...options }),
-    toPathPng: (options) => scriptToPathPng(actor.getScript(), { traits, color, ...options }),
+    toSvg: (options) =>
+      scriptToSvg(actor.getScript(), {
+        traits: traits.current,
+        color: color.current,
+        ...options,
+      }),
+    toPathPng: (options) =>
+      scriptToPathPng(actor.getScript(), {
+        traits: traits.current,
+        color: color.current,
+        ...options,
+      }),
     get position() {
       return { ...actor.position }
     },

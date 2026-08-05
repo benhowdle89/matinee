@@ -25,20 +25,10 @@ jobs:
       - run: npm run test
       - run: npm run build
 
-      - name: Check the published package stays small and clean
-        run: |
-          set -euo pipefail
-          npm pack --dry-run 2>&1 | tee /tmp/pack.txt
-          if grep -qE 'dist/(demo|test)|\.test\.' /tmp/pack.txt; then
-            echo "::error::test or demo files leaked into the tarball"
-            exit 1
-          fi
+      # Packs the tarball, installs it into a throwaway project and uses it the
+      # way a consumer does: ESM and CJS entry points, the styles.css subpath,
+      # the shipped .d.ts, server rendering, and the dependency list. The unit
+      # suite imports from ./src and so proves none of that.
+      - run: npm run verify
 
-      - name: Assert there are no runtime dependencies
-        run: |
-          set -euo pipefail
-          DEPS="$(node -p "Object.keys(require('./package.json').dependencies || {}).length")"
-          if [ "$DEPS" != "0" ]; then
-            echo "::error::matinee ships $DEPS runtime dependencies; it ships zero"
-            exit 1
-          fi
+      - run: npm run demo:build

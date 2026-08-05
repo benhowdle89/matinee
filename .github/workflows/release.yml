@@ -37,6 +37,7 @@ jobs:
       - run: npm run typecheck
       - run: npm run test
       - run: npm run build
+      - run: npm run verify
 
       - name: Verify the tag matches package.json
         run: |
