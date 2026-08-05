@@ -252,11 +252,37 @@ look at them on a real demo before you're happy.
 - **The demo autoplays on load.** Guarded by `prefers-reduced-motion` and it
   only fires once, but some people will still find it presumptuous.
 
+## Before you promote it
+
+Three things I could not do for you, in the order I would do them.
+
+**1. Watch the motion.** `npm run demo`, two minutes. The motion is the
+product, and every value behind it is my judgement rather than yours: the three
+personality bundles, `SETTLE_FRACTION = 0.26`, the hesitation delays, the
+default blue. I have only ever seen it through a browser I was driving. If
+`confident` feels wrong, changing it now is trivial and changing it after
+people are using it is a version bump plus regenerating every asset in
+`assets/`.
+
+**2. Click "Record this" on the demo.** `useRecorder` has never met a real
+permission prompt. It is tested thoroughly against a fake `MediaRecorder`
+(codec negotiation, the blob and object URL, releasing the capture on stop and
+on unmount, a declined prompt treated as a normal outcome) but a stub cannot
+tell you that `getDisplayMedia` behaves. If it is broken, it is broken in
+public on the demo page.
+
+**3. Glance at the npm page.** npm sits behind Cloudflare bot protection so I
+could not load it headlessly to confirm the README images render. They are
+absolute `raw.githubusercontent.com` URLs as of 0.1.2, which is the form that
+works on both npm and GitHub, and I verified the hero still animates when
+served from there. But I have not seen the npm page with my own eyes and will
+not claim otherwise.
+
 ## Launch checklist
 
 - [x] **npm trusted publisher configured**: `benhowdle89/matinee`,
       `release.yml`
-- [x] **Published**: https://www.npmjs.com/package/matinee, currently 0.1.1,
+- [x] **Published**: https://www.npmjs.com/package/matinee, currently 0.1.2,
       with a provenance attestation and zero runtime dependencies
 - [x] **GitHub releases cut**:
       https://github.com/benhowdle89/matinee/releases
@@ -271,6 +297,9 @@ look at them on a real demo before you're happy.
       4xx, and the performance runs end to end.
 - [x] **`homepage` in `package.json`** points at the demo, and is live on npm
       as of 0.1.1.
+- [x] **README images are absolute URLs** so they render on npm as well as
+      GitHub, shipped in 0.1.2. The hero was re-verified animating when served
+      from `raw.githubusercontent.com`.
 - [x] **Automatic demo deploys.** The Pages project is connected to the repo in
       the Cloudflare dashboard, so every push to `main` rebuilds and ships. No
       API token is stored in GitHub. To ship by hand anyway:
