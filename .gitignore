@@ -1,0 +1,7 @@
+node_modules
+dist
+demo/dist
+.DS_Store
+*.tgz
+.claude/settings.local.json
+scripts/.hero-build

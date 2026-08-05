@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm view *)",
+      "Bash(npm publish *)",
+      "Bash(ls -la /Users/benhowdle/Sites/orbs 2>&1 | head -40)",
+      "Read(//Users/benhowdle/Sites/orbs/**)",
+      "Read(//Users/benhowdle/**)",
+      "Bash(npm --version)",
+      "WebFetch(domain:docs.npmjs.com)",
+      "WebSearch",
+      "Bash(echo \"npm: $\\(npm --version\\)\")",
+      "Bash(volta install *)",
+      "Bash(git init *)",
+      "Bash(npm install-scripts *)",
+      "Bash(npx vitest *)",
+      "Bash(npx tsc *)",
+      "Bash(npm run *)",
+      "Bash(npm pack *)"
+    ]
+  }
+}
