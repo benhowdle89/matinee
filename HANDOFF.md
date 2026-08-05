@@ -187,21 +187,42 @@ look at them on a real demo before you're happy.
 
 ## Launch checklist
 
-- [ ] **Configure the npm trusted publisher** (see above) — the release will
-      fail without it
-- [ ] `npm version 0.1.0 && git push --follow-tags` to cut the release
-- [ ] npm: https://www.npmjs.com/package/matinee
-- [ ] Repo: https://github.com/benhowdle89/matinee *(confirm it's public — it
-      was flipped private and back during the build; while private the CI badge
-      and links in the README render broken to everyone else)*
-- [ ] Demo: connect the repo in Cloudflare Pages — build `npm run demo:build`,
-      output `demo/dist` (see `wrangler.toml`), then wire the domain
-- [ ] Hero SVG embedded in the README and animating on github.com — verified
-      locally, worth one more look on the live page since camo serves it
-- [ ] Point `homepage` in `package.json` at the demo domain once it exists
-- [ ] Tweet:
+- [x] **npm trusted publisher configured** — `benhowdle89/matinee`,
+      `release.yml`
+- [x] **0.1.0 published** — https://www.npmjs.com/package/matinee, with a
+      provenance attestation, zero runtime dependencies
+- [x] **GitHub release cut** —
+      https://github.com/benhowdle89/matinee/releases/tag/v0.1.0
+- [x] **Repo public** — https://github.com/benhowdle89/matinee
+- [x] **Hero SVG embedded and animating on github.com** — verified against the
+      bytes GitHub actually serves, not assumed
+- [x] **Smoke-tested from the registry** — fresh `npm install matinee` in an
+      empty project; all exports resolve, `matinee/styles.css` resolves,
+      `.d.ts` ships, `scriptToSvg()` runs in Node with no DOM
+- [ ] **Demo site** — connect the repo in Cloudflare Pages: build
+      `npm run demo:build`, output `demo/dist` (see `wrangler.toml`), then wire
+      the domain
+- [ ] **Point `homepage` in `package.json`** at the demo domain once it exists
+      (currently the repo)
+- [ ] **Look at the motion yourself** — `npm run demo`. I have only seen it in
+      screenshots. If `confident` feels wrong, the numbers to turn are in the
+      table above.
+- [ ] **Tweet:**
 
       _(left blank — yours to write)_
+
+### Cutting the next release
+
+```sh
+npm version patch      # or minor
+git push --follow-tags
+```
+
+One trap I hit, so you don't: `--follow-tags` only pushes **annotated** tags. A
+plain `git tag v0.1.0` is lightweight and is silently left behind, so nothing
+triggers and you sit watching a workflow that was never queued. `npm version`
+creates annotated tags itself, so the two-line recipe above is fine — it is
+only hand-rolled tags that need `git tag -a`.
 
 ## Running things
 

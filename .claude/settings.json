@@ -23,7 +23,13 @@
       "Bash(kill %1)",
       "Bash(pkill -f \"vite --config demo\")",
       "Bash(gh run *)",
-      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\('files:'\\); [print\\(' ', f\\) for f in d.get\\('files',[]\\)]\")"
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\('files:'\\); [print\\(' ', f\\) for f in d.get\\('files',[]\\)]\")",
+      "Bash(git tag *)",
+      "Bash(git -c tag.gpgsign=false tag -a v0.1.0 -m 'matinee 0.1.0 *)",
+      "Bash(git push *)",
+      "Bash(git ls-remote *)",
+      "Bash(python3 -c ' *)",
+      "Bash(gh release *)"
     ]
   }
 }
