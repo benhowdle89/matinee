@@ -1,0 +1,22 @@
+# matinee
+
+> A React component for staged cursor performances. A programmable ghost cursor that drives your real app with real events, moving like a hand rather than a tween, then exports the performance as a self-contained animated SVG, a WebM recording, or a PNG still.
+
+matinee solves a documentation and marketing problem: product demos are normally screen-recorded or faked in After Effects, so they go stale the moment the UI changes. With matinee the demo is code, so it can be rerun after a redesign, reviewed as a diff, and reproduced per locale or plan or theme.
+
+Current version: 0.1.2. React >=18 as a peer dependency. Zero runtime dependencies.
+
+## Docs
+
+- [Full documentation](https://matinee.pages.dev/llms-full.txt): complete usage guide, recipes, gotchas, and the entire TypeScript API surface in one file
+- [README](https://github.com/benhowdle89/matinee/blob/main/README.md): the same material with images
+- [Live demo](https://matinee.pages.dev): a page that performs itself and generates its exports in the browser
+
+## Source
+
+- [Repository](https://github.com/benhowdle89/matinee)
+- [npm package](https://www.npmjs.com/package/matinee)
+
+## Optional
+
+- [Handoff notes](https://github.com/benhowdle89/matinee/blob/main/HANDOFF.md): design decisions, tuning values, and known rough edges

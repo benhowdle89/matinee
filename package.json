@@ -43,6 +43,7 @@
     "demo:build": "vite build --config demo/vite.config.ts",
     "hero": "npm run build && node scripts/make-hero.mjs && cp assets/hero.svg demo/public/hero.svg",
     "docs:assets": "npm run build && node scripts/make-docs-assets.mjs && node scripts/make-export-examples.mjs",
+    "llms": "npm run build && node scripts/make-llms.mjs",
     "og": "node scripts/make-og.mjs"
   },
   "peerDependencies": {

@@ -526,6 +526,8 @@ await cursor.say('and there it is')`}</code>
       <footer className="footer">
         <a href="https://github.com/benhowdle89/matinee">GitHub</a>
         <a href="https://www.npmjs.com/package/matinee">npm</a>
+        <a href="/llms.txt">llms.txt</a>
+        <a href="/llms-full.txt">Full docs as text</a>
         <span>Zero runtime dependencies</span>
         <span>MIT © Ben Howdle</span>
       </footer>

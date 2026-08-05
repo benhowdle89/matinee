@@ -31,4 +31,17 @@ jobs:
       # suite imports from ./src and so proves none of that.
       - run: npm run verify
 
+      # The machine-readable docs embed the shipped .d.ts verbatim, so they go
+      # stale the moment the API changes. Regenerate and fail if the result
+      # differs from what is committed.
+      - name: Check llms.txt is current
+        run: |
+          set -euo pipefail
+          node scripts/make-llms.mjs
+          if ! git diff --quiet -- llms.txt demo/public/llms.txt demo/public/llms-full.txt; then
+            echo "::error::llms.txt is out of date. Run 'npm run llms' and commit the result."
+            git diff --stat -- llms.txt demo/public/
+            exit 1
+          fi
+
       - run: npm run demo:build

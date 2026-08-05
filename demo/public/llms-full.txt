@@ -1,0 +1,456 @@
+# matinee
+
+> Staged cursor performances for React. Version 0.1.2.
+
+A programmable ghost cursor. You script it, it performs against your real
+running app using real DOM events, and then it exports itself as a file you can
+commit.
+
+Package: matinee (npm)
+Repository: https://github.com/benhowdle89/matinee
+Demo: https://matinee.pages.dev
+License: MIT
+Peer dependency: react >=18
+Runtime dependencies: none
+
+## Install
+
+```sh
+npm install matinee
+```
+
+## Minimal complete example
+
+This is a working file. Nothing is elided.
+
+```tsx
+import { useEffect } from 'react'
+import { Stage, useCursor } from 'matinee'
+import 'matinee/styles.css'
+
+function Demo() {
+  const cursor = useCursor()
+
+  useEffect(() => {
+    void (async () => {
+      await cursor.moveTo('#search')
+      await cursor.type('#search', 'invoices from March')
+      await cursor.click('#submit')
+      await cursor.say('and there it is')
+    })()
+  }, [cursor])
+
+  return <YourApp />
+}
+
+export default function Root() {
+  return (
+    <Stage label="Agent" personality="confident">
+      <Demo />
+    </Stage>
+  )
+}
+```
+
+Two required pieces:
+
+1. Wrap the app in `<Stage>`. It renders children untouched and mounts one
+   fixed, pointer-events:none, aria-hidden overlay. It never affects layout.
+2. Import `matinee/styles.css` once. Without it the cursor is invisible.
+
+`useCursor()` must be called inside a `<Stage>`. It throws otherwise.
+
+## Core concepts
+
+**The actor** is what performs. You reach it with `useCursor()`.
+
+**Targets** are how you say where. A target is one of:
+- a CSS selector string, for example `'#submit'` or `'.row:nth-child(2) button'`
+- a DOM `Element`
+- a React ref, meaning an object with a `.current` property
+- a point, `{ x: number, y: number }`, in viewport coordinates
+
+Targets are resolved **when the step runs, not when you write it**. A selector
+that does not exist yet is fine as long as it exists by the time the queue
+reaches it. If it still does not match, matinee logs a warning and the cursor
+stays put rather than throwing.
+
+**The queue.** Every method returns a promise that resolves when its motion
+finishes, and queues behind whatever is already running. This means `await` is
+optional and the order of your calls is always the order of execution. These
+two are equivalent:
+
+```ts
+await cursor.moveTo('#a'); await cursor.click('#a')
+cursor.moveTo('#a'); cursor.click('#a')
+```
+
+**Real events.** `click` dispatches genuine `pointerdown`, `mousedown`,
+`pointerup`, `mouseup` and `click` events on the resolved element, so React
+`onClick` handlers fire. `type` writes through the prototype value setter and
+dispatches `input`, which is what makes React controlled inputs actually update.
+
+**Scripts.** Every performance records itself as plain JSON while it runs.
+`cursor.getScript()` returns it; `cursor.play(script)` replays it.
+
+## Recipes
+
+### Fill and submit a form
+
+```ts
+await cursor.click('#email')
+await cursor.type('#email', 'ada@example.com')
+await cursor.type('#password', 'hunter2')
+await cursor.click('button[type="submit"]')
+```
+
+### Scroll to something below the fold first
+
+```ts
+await cursor.scrollTo('#pricing')
+await cursor.hover('#pro-plan', 800)
+await cursor.click('#upgrade')
+```
+
+### Narrate with a speech bubble
+
+```ts
+await cursor.say('first, search for the invoice')
+await cursor.type('#search', 'INV-0042')
+await cursor.say('and there it is', 2000)
+```
+
+### Export an animated SVG for a README
+
+```ts
+const svg = cursor.toSvg({
+  background: '#faf8f4',
+  backdrop: '<rect x="24" y="24" width="512" height="212" rx="10" fill="#fff"/>',
+  width: 720,
+})
+// write svg to a .svg file, commit it, then in markdown:
+// <img src="assets/demo.svg" width="720">
+```
+
+### Record the tab to WebM
+
+```tsx
+const recorder = useRecorder()
+// recorder.start() triggers a browser permission prompt. This is unavoidable.
+// recorder.stop() then fills recorder.blob and recorder.url.
+// recorder.download('demo.webm') saves it.
+```
+
+### Replay a saved performance
+
+```ts
+const script = cursor.getScript()
+localStorage.setItem('demo', JSON.stringify(script))
+
+// later, possibly in another session
+import { validateScript } from 'matinee'
+await cursor.play(validateScript(JSON.parse(localStorage.getItem('demo'))))
+```
+
+## Behaviours that surprise people
+
+- **`toSvg()` exports the cursor, never your page.** matinee does not
+  rasterise the DOM. With no options you get the cursor, nameplate and click
+  ripples on a transparent background, intended to be laid over a screenshot
+  you already have. To produce a standalone clip, pass `background` and a
+  `backdrop` of your own raw SVG markup.
+- **A performance containing `scrollTo` cannot be exported coherently.**
+  Recorded points are viewport coordinates and the export has no concept of a
+  scroll offset, so points either side of a scroll do not relate to each other.
+  Keep exportable takes scroll-free.
+- **`say()` is not rendered in SVG exports.** It shows live but the exporter
+  treats it as a pause.
+- **The exported SVG contains no `<script>` and no external references.** This
+  is deliberate and is what makes it animate inside a GitHub README, which
+  serves images under `default-src 'none'; style-src 'unsafe-inline'; sandbox`.
+- **Reduced motion is honoured everywhere.** Under
+  `prefers-reduced-motion: reduce` the cursor jump-cuts between positions
+  instead of animating, and the exported SVG shows a still frame. Set
+  `respectReducedMotion={false}` on `<Stage>` to override.
+- **`useCursor()` returns a stable object** for the life of the `<Stage>`, so
+  it is safe in a `useEffect` dependency array.
+- **Server rendering is safe.** On the server `<Stage>` renders children only,
+  and every cursor method is a resolved no-op, so an app that performs on mount
+  does not throw in Node.
+- **`scrollTo` only handles vertical scrolling.**
+
+## What matinee is not, and does not do
+
+Do not generate code that assumes any of the following, because none of it
+exists:
+
+- No multiple simultaneous cursors. One actor per `<Stage>`.
+- No GIF export. SVG, WebM and PNG only.
+- No headless or CLI rendering. It runs in a browser.
+- No drag and drop action. There is no `cursor.drag()`.
+- No framework adapters. React only, no Vue, Svelte or vanilla build.
+- No plugin system, no middleware, no custom action registration.
+- No recorder that captures a real user's mouse into a script. Scripts are
+  written by hand or produced by running a performance.
+- No DOM to canvas or DOM to image rendering of your app.
+
+Related but different tools, in case one of them is what was actually wanted:
+ghost-cursor is human-like mouse movement for Puppeteer built for bot evasion;
+Screen Studio records a real screen; rrweb records and replays real user
+sessions.
+
+## Complete API
+
+The following is the shipped TypeScript declaration file, verbatim.
+
+```ts
+import { ReactNode } from 'react';
+
+/**
+ * The motion engine.
+ *
+ * Everything here exists to answer one question: would this fool you in a
+ * nine-second clip? A cursor that lerps between two points reads as a computer
+ * immediately. What reads as a hand is:
+ *
+ *   - a curved path, never the same curve twice
+ *   - a minimum-jerk velocity profile (the actual model for human reaching)
+ *   - arriving slightly past the target and settling back
+ *   - a sub-pixel tremor that never quite stops
+ *
+ * No dependencies, no allocations in the hot path, all pure functions so the
+ * maths can be tested without a DOM.
+ */
+type Point = {
+    x: number;
+    y: number;
+};
+type PersonalityName = 'confident' | 'curious' | 'caffeinated';
+type Traits = {
+    /** Multiplier on travel time. Lower is faster. */
+    pace: number;
+    /** Perpendicular bow of the path, as a fraction of the distance travelled. */
+    curvature: number;
+    /** How much the curvature varies journey to journey, 0..1. */
+    curvatureJitter: number;
+    /** Peak overshoot past the target, as a fraction of distance. */
+    overshoot: number;
+    /** Ceiling on overshoot in px, so long journeys don't fly off. */
+    overshootMax: number;
+    /** Amplitude of the sub-pixel tremor while moving, in px. */
+    tremor: number;
+    /** Radius of the idle wander while paused, in px. */
+    drift: number;
+    /** Speed of the idle wander. */
+    driftRate: number;
+    /** Per-keystroke delay range, in ms. */
+    keystroke: [number, number];
+    /** Pause before committing to a click, in ms. Humans hesitate. */
+    hesitation: number;
+};
+declare const PERSONALITIES: Record<PersonalityName, Traits>;
+
+/**
+ * A Script is the performance as plain data.
+ *
+ * It is recorded as the actor performs, never derived afterwards, and it is
+ * JSON all the way down (no functions, no element references), so it can be
+ * stored, posted, diffed, or handed to `play()` in a different session.
+ */
+
+type ActionName = 'move' | 'click' | 'dblclick' | 'type' | 'scroll' | 'hover' | 'pause' | 'say' | 'show' | 'hide';
+type Step = {
+    action: ActionName;
+    /**
+     * How to find the target again on replay. A selector when the caller gave
+     * one (survives rerenders, reflows, and different viewport sizes); a point
+     * when they gave coordinates or a bare element.
+     */
+    target?: string | Point;
+    /**
+     * Where the cursor actually ended up. Redundant with `target` for point
+     * targets, but for selector targets it is the difference between an export
+     * that reproduces the performance and one that re-queries a page which has
+     * since changed, and it lets exports run with no DOM at all.
+     */
+    point?: Point;
+    text?: string;
+    /** ms from the start of the performance. */
+    at: number;
+    /** ms this step took. */
+    duration: number;
+};
+type Script = {
+    version: 1;
+    viewport: {
+        w: number;
+        h: number;
+    };
+    /** Seeds the path randomness, so a replay traces the same curves. */
+    seed: number;
+    /** Where the cursor was standing before the first step. */
+    origin: Point;
+    steps: Step[];
+};
+declare function validateScript(value: unknown): Script;
+
+/**
+ * The actor: what actually performs.
+ *
+ * Framework-agnostic on purpose: it owns position, the action queue, and the
+ * requestAnimationFrame loop, and knows nothing about React. <Stage> attaches
+ * to it; it does not attach to <Stage>.
+ *
+ * Two rules run through everything here:
+ *   1. Targets resolve at execution time, never at call time. By the time a
+ *      queued click runs, the page has usually moved on.
+ *   2. Events dispatched are real. The host app cannot tell the difference,
+ *      which is the entire point of a staged performance over a video.
+ */
+
+type Target = string | Element | {
+    current: Element | null;
+} | Point;
+
+/**
+ * What the audience actually sees.
+ *
+ * Position is written straight to the DOM node from the actor's frame
+ * callback, never through React state. Sixty setState calls a second would
+ * make the motion the one thing in the library that stutters.
+ *
+ * The low-frequency things (pressed, typing, caption) do go through state,
+ * because they change a handful of times a performance.
+ */
+
+type CursorGlyph = 'pointer' | 'hand' | ReactNode;
+
+/**
+ * A still of the journey: the path the cursor took, with a marker at every
+ * click, on transparency. Cheap to produce and it drops straight onto a
+ * screenshot in a slide.
+ */
+
+type PngOptions = {
+    /** Output width in px. Defaults to the recorded viewport width. */
+    width?: number;
+    color?: string;
+    traits?: Traits;
+    /** Multiplier for retina output. Defaults to the device pixel ratio. */
+    pixelRatio?: number;
+    lineWidth?: number;
+};
+declare function scriptToPathPng(script: Script, options?: PngOptions): Promise<Blob>;
+
+/**
+ * The animated SVG export: the flagship.
+ *
+ * Produces one self-contained file with no <script>, no external references,
+ * and no fetches, because that is the exact shape GitHub's sandbox will render
+ * when a README embeds it with <img>. Everything is inline: the keyframes, the
+ * glyph, the nameplate, the colour.
+ *
+ * Motion is expressed as `transform: translate()` keyframes sampled from the
+ * real motion function rather than as an `offset-path` sweep. Two reasons:
+ * plain transform keyframes are supported by every renderer that will ever see
+ * this, and, more importantly, they reproduce the overshoot and the tremor
+ * exactly, because they *are* the sampled positions. An offset-path with an
+ * easing function can only approximate the curve the audience actually
+ * watched.
+ */
+
+type SvgOptions = {
+    /** `'transparent'` (default) so it can sit on top of a screenshot. */
+    background?: 'transparent' | string;
+    /** Rendered width in px. The viewBox keeps the aspect ratio. */
+    width?: number;
+    loop?: boolean;
+    /** Nameplate text, or `false` for none. */
+    label?: string | false;
+    color?: string;
+    /** Raw SVG markup drawn behind the cursor. Used to stage a scene. */
+    backdrop?: string;
+    traits?: Traits;
+    fps?: number;
+};
+declare function scriptToSvg(script: Script, options?: SvgOptions): string;
+
+/**
+ * <Stage>: the two lines of integration.
+ *
+ * It renders its children completely untouched and mounts one fixed,
+ * pointer-events:none, aria-hidden overlay beside them. It must never affect
+ * layout, never intercept a click, and never appear to a screen reader.
+ */
+
+type Cursor = {
+    moveTo(target: Target): Promise<void>;
+    click(target?: Target): Promise<void>;
+    dblclick(target?: Target): Promise<void>;
+    type(target: Target, text: string): Promise<void>;
+    scrollTo(target: Target): Promise<void>;
+    hover(target: Target, ms?: number): Promise<void>;
+    pause(ms?: number): Promise<void>;
+    say(text: string, ms?: number): Promise<void>;
+    show(): Promise<void>;
+    hide(): Promise<void>;
+    /** The performance so far, as plain data. */
+    getScript(): Script;
+    clearScript(): void;
+    play(script: Script): Promise<void>;
+    /** Self-contained animated SVG of the recorded performance. */
+    toSvg(options?: SvgOptions): string;
+    /** Static PNG of the path with click markers, on transparency. */
+    toPathPng(options?: PngOptions): Promise<Blob>;
+    readonly position: Point;
+};
+type StageProps = {
+    children?: ReactNode;
+    /** Nameplate riding with the cursor. `false` removes it. */
+    label?: string | false;
+    color?: string;
+    cursor?: CursorGlyph;
+    personality?: PersonalityName;
+    /** `true` for the default length, or a number of dots. */
+    trail?: boolean | number;
+    scale?: number;
+    zIndex?: number;
+    respectReducedMotion?: boolean;
+    onScriptChange?: (script: Script) => void;
+};
+declare function Stage({ children, label, color, cursor, personality, trail, scale, zIndex, respectReducedMotion, onScriptChange, }: StageProps): ReactNode;
+declare function useCursor(): Cursor;
+
+/**
+ * Video export, honestly.
+ *
+ * This records the real tab through getDisplayMedia and MediaRecorder. That
+ * means one browser permission prompt, and it means the visitor picks what
+ * gets shared. There is no way around the prompt: a page cannot capture
+ * itself unasked, and it should not be able to.
+ *
+ * The alternative (walking the DOM onto a canvas) is a rabbit hole that
+ * produces something subtly wrong for every non-trivial page. We don't.
+ */
+type RecorderOptions = {
+    /** Overrides the codec probe. Rarely needed. */
+    mimeType?: string;
+    /** Video bitrate in bits per second. */
+    videoBitsPerSecond?: number;
+};
+type RecorderHandle = {
+    /** False when the browser has no getDisplayMedia or no MediaRecorder. */
+    supported: boolean;
+    recording: boolean;
+    blob: Blob | null;
+    /** Object URL for `blob`, revoked automatically when it is replaced. */
+    url: string | null;
+    error: Error | null;
+    start: () => Promise<void>;
+    stop: () => void;
+    download: (filename?: string) => void;
+};
+declare function useRecorder(options?: RecorderOptions): RecorderHandle;
+
+export { type ActionName, type Cursor, type CursorGlyph, PERSONALITIES, type PersonalityName, type PngOptions, type Point, type RecorderHandle, type RecorderOptions, type Script, Stage, type StageProps, type Step, type SvgOptions, type Target, type Traits, scriptToPathPng, scriptToSvg, useCursor, useRecorder, validateScript };
+```
