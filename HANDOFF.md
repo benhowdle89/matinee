@@ -247,11 +247,10 @@ look at them on a real demo before you're happy.
       4xx, and the performance runs end to end.
 - [x] **`homepage` in `package.json`** points at the demo. It reaches npm on the
       next publish, not retroactively.
-- [ ] **Optional: automatic demo deploys.** Right now a deploy is manual
-      (`npm run demo:build && npx wrangler pages deploy demo/dist
-      --project-name matinee`). To automate, connect the repo in the Cloudflare
-      dashboard rather than adding a deploy step to Actions, which would need a
-      `CLOUDFLARE_API_TOKEN` secret. Settings are in `wrangler.toml`.
+- [x] **Automatic demo deploys.** The Pages project is connected to the repo in
+      the Cloudflare dashboard, so every push to `main` rebuilds and ships. No
+      API token is stored in GitHub. To ship by hand anyway:
+      `npm run demo:build && npx wrangler pages deploy demo/dist --project-name matinee`
 - [ ] **Turn GitHub Pages back off** (Settings, Pages, Source, None). It got
       enabled while we were deciding between hosts, and it is set to deploy
       from the branch root, so it publishes the repository itself rather than
@@ -267,19 +266,6 @@ look at them on a real demo before you're happy.
 
       _(left blank, yours to write)_
 
-### Cutting the next release
-
-```sh
-npm version patch      # or minor
-git push --follow-tags
-```
-
-One trap I hit, so you don't: `--follow-tags` only pushes **annotated** tags. A
-plain `git tag v0.1.0` is lightweight and is silently left behind, so nothing
-triggers and you sit watching a workflow that was never queued. `npm version`
-creates annotated tags itself, so the two-line recipe above is fine; it is
-only hand-rolled tags that need `git tag -a`.
-
 ## Running things
 
 ```sh
@@ -289,5 +275,32 @@ npm run build         # tsup -> ESM + CJS + .d.ts + styles.css
 npm run verify        # pack, install into a temp project, use it as a consumer
 npm run demo          # the demo site, localhost
 npm run hero          # rebuild assets/hero.svg
+npm run docs:assets   # rebuild the three personality SVGs in the README
 npm run og            # rebuild assets/og.svg
 ```
+
+## How the two things ship
+
+**The demo site** rebuilds itself. The Cloudflare Pages project is connected to
+the repo, so a push to `main` builds `npm run demo:build` and publishes
+`demo/dist` to https://matinee.pages.dev. Nothing to run, no secret in GitHub.
+
+**The npm package** ships on a version tag, and only on a version tag:
+
+```sh
+npm version patch      # or minor, or major
+git push --follow-tags
+```
+
+That fires `release.yml`, which typechecks, tests, builds, runs `npm run
+verify`, publishes through trusted publishing with a provenance attestation,
+and cuts the GitHub release. No token, no OTP, nothing to rotate.
+
+Watch out for one trap: `--follow-tags` pushes **annotated** tags only. `npm
+version` creates annotated tags itself so the recipe above is fine, but a
+hand-rolled `git tag v1.2.3` is lightweight, gets silently left behind, and you
+sit watching a workflow that was never queued. Use `git tag -a` if you tag by
+hand.
+
+Pushing to `main` on its own publishes nothing. It rebuilds the demo and runs
+CI, and that is all.

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="230" viewBox="0 0 420 230" role="img" aria-label="An animated cursor performance">
+<style>.mt-cursor{transform:translate(96px,142px)}
+.mt-rip{fill:none;stroke:#2f6bff;stroke-width:2;opacity:0;transform-box:fill-box;transform-origin:center}
+@media (prefers-reduced-motion: no-preference){
+.mt-cursor{animation:mt-travel 2880ms linear infinite both}
+.mt-rip{animation:mt-ripple 2880ms linear infinite both}
+}
+@keyframes mt-travel{0%{transform:translate(60px,205px)}0%{transform:translate(59.58px,204.64px)}1.1574%{transform:translate(60.39px,204.77px)}2.3148%{transform:translate(62.98px,203.17px)}3.4722%{transform:translate(70.06px,198.46px)}4.6296%{transform:translate(80.12px,190.01px)}5.787%{transform:translate(93.58px,177.76px)}6.9444%{transform:translate(107.32px,162.09px)}8.1019%{transform:translate(120.92px,144.09px)}9.2593%{transform:translate(131.5px,125.85px)}10.4167%{transform:translate(139.75px,110px)}11.5741%{transform:translate(144.35px,98.52px)}12.7315%{transform:translate(147.48px,91.27px)}13.8889%{transform:translate(148.36px,87.67px)}15.0463%{transform:translate(148.78px,86.92px)}16.2037%{transform:translate(148.26px,86.9px)}17.3611%{transform:translate(148.29px,87.73px)}18.5185%{transform:translate(147.88px,88.78px)}30.0926%{transform:translate(148px,89px)}30.5556%{transform:translate(148.11px,89.5px)}31.713%{transform:translate(147.68px,89.5px)}32.8704%{transform:translate(147.67px,95.09px)}34.0278%{transform:translate(146.88px,104.53px)}35.1852%{transform:translate(142.26px,116.88px)}36.3426%{transform:translate(134.35px,127.15px)}37.5%{transform:translate(123.4px,135.76px)}38.6574%{transform:translate(111.14px,139.26px)}39.8148%{transform:translate(102.24px,141.41px)}40.9722%{transform:translate(96.87px,141.86px)}42.1296%{transform:translate(94.79px,142.37px)}43.287%{transform:translate(95.29px,141.66px)}44.4444%{transform:translate(95.55px,142.33px)}45.6019%{transform:translate(95.74px,141.97px)}57.8704%{transform:translate(96px,142px)}58.3333%{transform:translate(99.7px,143.4px)}68.75%{transform:translate(99.81px,143.79px)}75.6944%{transform:translate(99.84px,144.05px)}75.6944%{transform:translate(96px,142px)}100%{transform:translate(96px,142px)}}
+@keyframes mt-ripple{
+0%{opacity:.55;transform:scale(.12)}
+21.5278%{opacity:0;transform:scale(1)}
+100%{opacity:0;transform:scale(1)}
+}</style>
+<rect width="100%" height="100%" fill="#faf8f4"/>
+<rect x="20" y="20" width="380" height="190" rx="10" fill="#fff" stroke="#e2ddd3" stroke-width="1.4"/>
+<rect x="48" y="44" width="120" height="9" rx="4.5" fill="#17161a" opacity="0.8"/>
+<rect x="48" y="72" width="200" height="34" rx="7" fill="#fff" stroke="#e2ddd3" stroke-width="1.4"/>
+<rect x="62" y="84" width="86" height="9" rx="4.5" fill="#a8a298" opacity="0.4"/>
+<rect x="48" y="126" width="96" height="32" rx="7" fill="#17161a"/>
+<rect x="66" y="138" width="60" height="8" rx="4" fill="#fff" opacity="0.9"/>
+<rect x="278" y="72" width="94" height="86" rx="8" fill="#faf8f4" stroke="#e2ddd3" stroke-width="1.4"/>
+<rect x="292" y="88" width="52" height="7" rx="3.5" fill="#a8a298" opacity="0.5"/>
+<rect x="292" y="104" width="66" height="6" rx="3" fill="#a8a298" opacity="0.32"/>
+<rect x="292" y="117" width="58" height="6" rx="3" fill="#a8a298" opacity="0.32"/>
+<rect x="48" y="180" width="70" height="7" rx="3.5" fill="#a8a298" opacity="0.3"/>
+
+<g><circle class="mt-rip" cx="148" cy="89" r="20" style="animation-delay:1100ms"/><circle class="mt-rip" cx="96" cy="142" r="20" style="animation-delay:1900ms"/></g>
+<g class="mt-cursor">
+<g transform="translate(-5,-2.5)">
+<path d="M5 2.5 L5 19.4 L9.2 15.3 L11.9 21.2 L14.6 20 L11.9 14.2 L17.6 14.2 Z" fill="#fff" stroke="rgba(17,17,20,0.92)" stroke-width="1.35" stroke-linejoin="round"/>
+</g>
+</g>
+</svg>
