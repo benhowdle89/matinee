@@ -9,6 +9,8 @@
 [![npm](https://img.shields.io/npm/v/matinee?color=2f6bff&label=npm)](https://www.npmjs.com/package/matinee)
 [![CI](https://github.com/benhowdle89/matinee/actions/workflows/ci.yml/badge.svg)](https://github.com/benhowdle89/matinee/actions/workflows/ci.yml)
 
+**[matinee.pages.dev](https://matinee.pages.dev)** &middot; the demo performs itself
+
 </div>
 
 Every AI product demo shows a cursor using software. Almost all of them are faked by hand in After Effects, and they have to be redone every time the UI changes.

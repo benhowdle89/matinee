@@ -32,7 +32,9 @@
       "Bash(gh release *)",
       "Read(//Users/benhowdle/Sites/orbs/.github/workflows/**)",
       "Bash(git add *)",
-      "Bash(git -c commit.gpgsign=false commit -q -m ' *)"
+      "Bash(git -c commit.gpgsign=false commit -q -m ' *)",
+      "Bash(npx wrangler *)",
+      "Bash(git rm *)"
     ]
   }
 }

@@ -63,7 +63,7 @@
     "node": ">=18"
   },
   "author": "Ben Howdle <benhowdle89@gmail.com>",
-  "homepage": "https://github.com/benhowdle89/matinee",
+  "homepage": "https://matinee.pages.dev",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/benhowdle89/matinee.git"

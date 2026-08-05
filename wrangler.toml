@@ -1,14 +1,20 @@
 # Cloudflare Pages config for the demo site.
 #
-# Not deployed by CI; Ben wires the domain and connects the repo in the
-# Cloudflare dashboard. Once connected, these are the settings it needs:
+# The project exists and is live at https://matinee.pages.dev
 #
-#   Build command:        npm run demo:build
-#   Build output:         demo/dist
-#   Node version:         20
+# Deploy by hand:
+#   npm run demo:build && npx wrangler pages deploy demo/dist --project-name matinee
 #
-# Or from a terminal, without touching the dashboard:
-#   npm run demo:build && npx wrangler pages deploy demo/dist
+# To deploy automatically on push instead, connect the repo in the Cloudflare
+# dashboard (Workers & Pages -> matinee -> Settings -> Builds) with:
+#   Build command:  npm run demo:build
+#   Build output:   demo/dist
+#   Node version:   20
+# That route needs no API token in GitHub, which is why it is preferred over a
+# deploy step in Actions.
+#
+# The demo is served from the root of the domain, so it builds with Vite's
+# default base. demo/vite.config.ts reads DEMO_BASE if it ever needs a subpath.
 
 name = "matinee"
 compatibility_date = "2026-08-05"

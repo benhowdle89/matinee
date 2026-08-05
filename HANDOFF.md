@@ -199,11 +199,24 @@ look at them on a real demo before you're happy.
 - [x] **Smoke-tested from the registry**: fresh `npm install matinee` in an
       empty project; all exports resolve, `matinee/styles.css` resolves,
       `.d.ts` ships, `scriptToSvg()` runs in Node with no DOM
-- [ ] **Demo site**: connect the repo in Cloudflare Pages: build
-      `npm run demo:build`, output `demo/dist` (see `wrangler.toml`), then wire
-      the domain
-- [ ] **Point `homepage` in `package.json`** at the demo domain once it exists
-      (currently the repo)
+- [x] **Demo site live** at https://matinee.pages.dev, deployed to Cloudflare
+      Pages with `wrangler`. Verified in a real browser: no console errors, no
+      4xx, and the performance runs end to end.
+- [x] **`homepage` in `package.json`** points at the demo. It reaches npm on the
+      next publish, not retroactively.
+- [ ] **Optional: automatic demo deploys.** Right now a deploy is manual
+      (`npm run demo:build && npx wrangler pages deploy demo/dist
+      --project-name matinee`). To automate, connect the repo in the Cloudflare
+      dashboard rather than adding a deploy step to Actions, which would need a
+      `CLOUDFLARE_API_TOKEN` secret. Settings are in `wrangler.toml`.
+- [ ] **Turn GitHub Pages back off** (Settings, Pages, Source, None). It got
+      enabled while we were deciding between hosts, and it is set to deploy
+      from the branch root, so it publishes the repository itself rather than
+      the demo. Cloudflare is the host; two URLs for one demo is worse than
+      one.
+- [ ] **Wire a custom domain** if you want one, then update
+      `VITE_SITE_ORIGIN` in `demo/.env` (the absolute `og:image` URL) and
+      `homepage` in `package.json`.
 - [ ] **Look at the motion yourself**: `npm run demo`. I have only seen it in
       screenshots. If `confident` feels wrong, the numbers to turn are in the
       table above.
