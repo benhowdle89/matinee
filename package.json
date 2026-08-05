@@ -1,6 +1,6 @@
 {
   "name": "matinee",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Staged cursor performances for React. A programmable ghost cursor that moves, clicks, types and scrolls like a human, then exports itself as an animated SVG.",
   "keywords": [
     "react",
