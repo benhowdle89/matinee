@@ -93,18 +93,32 @@ The brief asked for this to be checked, not believed, so:
   and `default-src 'none'` kill scripts and external fetches. The export is
   built to fit exactly that hole.
 
-## One thing about your machine, not this repo
+## Two things about your machine, not this repo
 
-There is a stray `node_modules` at **`~/node_modules`** containing (among other
+Both of these made something pass locally and fail in CI, which is the most
+expensive kind of bug to chase.
+
+**1. A stray `node_modules` at `~/node_modules`,** containing (among other
 things) `@types/node`. TypeScript walks *up* the directory tree looking for
 `node_modules`, so that directory silently satisfies imports for **every
 project under your home directory**. It is why `@types/node` being missing from
-this package was invisible locally and only surfaced in CI.
+this package was invisible locally and only surfaced in CI. Worth deleting.
 
-Worth deleting, or at least knowing about; it will mask a missing dependency
-again. It is also why I stopped trusting `npm run typecheck` on this machine
-and reproduced CI properly (clean copy under `/private/tmp`, `npm ci`, no
-`dist/`) before believing the fix.
+**2. `.env` is in your global gitignore** (`~/.gitignore_global`, line 3). That
+is a sensible default for secrets and a trap for build-time config: `demo/.env`
+was never committed, so Cloudflare built without it and the live site shipped
+`%VITE_SITE_ORIGIN%/og.png` as its social card URL. Nothing warned; the build
+went green.
+
+The fix was to stop depending on the file. The site origin is now a constant in
+`demo/vite.config.ts` with an env override, and the build **throws** if any
+`%PLACEHOLDER%` survives into the emitted HTML, so this fails loudly next time
+instead of quietly shipping a broken link. Both of those are checked: plant a
+placeholder and the build stops.
+
+Between these two, I stopped trusting a green local run on this machine and
+started reproducing CI properly (clean copy under `/private/tmp`, `npm ci`, no
+`dist/`) before believing a fix.
 
 ## Deliberately cut: your v0.2 menu
 
@@ -257,7 +271,7 @@ look at them on a real demo before you're happy.
       the demo. Cloudflare is the host; two URLs for one demo is worse than
       one.
 - [ ] **Wire a custom domain** if you want one, then update
-      `VITE_SITE_ORIGIN` in `demo/.env` (the absolute `og:image` URL) and
+      `SITE_ORIGIN` in `demo/vite.config.ts` (the absolute `og:image` URL) and
       `homepage` in `package.json`.
 - [ ] **Look at the motion yourself**: `npm run demo`. I have only seen it in
       screenshots. If `confident` feels wrong, the numbers to turn are in the

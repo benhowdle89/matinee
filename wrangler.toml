@@ -16,8 +16,9 @@
 #
 # The demo is served from the root of the domain, so it builds with Vite's
 # default base. demo/vite.config.ts reads DEMO_BASE if it ever needs a subpath.
-# The absolute og:image URL comes from VITE_SITE_ORIGIN in demo/.env, which has
-# to change if the site moves to a custom domain.
+# The absolute og:image URL is a constant in demo/vite.config.ts, overridable
+# with a VITE_SITE_ORIGIN env var. It has to change if the site moves to a
+# custom domain.
 
 name = "matinee"
 compatibility_date = "2026-08-05"
